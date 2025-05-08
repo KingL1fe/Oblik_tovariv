@@ -130,18 +130,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cart.cpp" />
+    <ClCompile Include="Customer.cpp" />
+    <ClCompile Include="Discount.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="InventoryApp.cpp" />
+    <ClCompile Include="Invoice.cpp" />
+    <ClCompile Include="Order.cpp" />
+    <ClCompile Include="Payment.cpp" />
     <ClCompile Include="Product.cpp" />
-    <ClCompile Include="Store.cpp" />
+    <ClCompile Include="Category.cpp" />
+    <ClCompile Include="SalesReport.cpp" />
+    <ClCompile Include="Stock.cpp" />
+    <ClCompile Include="Supplier.cpp" />
+    <ClCompile Include="SupplierOrder.cpp" />
+    <ClCompile Include="Transaction.cpp" />
+    <ClCompile Include="Warehouse.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cart.h" />
+    <ClInclude Include="Customer.h" />
+    <ClInclude Include="Discount.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="InventoryApp.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Invoice.h" />
+    <ClInclude Include="Order.h" />
+    <ClInclude Include="Payment.h" />
     <ClInclude Include="Product.h" />
-    <ClInclude Include="Store.h" />
+    <ClInclude Include="Category.h" />
+    <ClInclude Include="SalesReport.h" />
+    <ClInclude Include="Stock.h" />
+    <ClInclude Include="Supplier.h" />
+    <ClInclude Include="SupplierOrder.h" />
+    <ClInclude Include="Transaction.h" />
+    <ClInclude Include="Warehouse.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
