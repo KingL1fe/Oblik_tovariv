@@ -1,5 +1,5 @@
 #include "Category.h"
-
+#include"pch.h"
 Category::Category(int id, const string& name, const string& description)
     : id(id), name(name), description(description) {
 }

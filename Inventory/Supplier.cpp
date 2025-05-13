@@ -1,6 +1,6 @@
 #define SUPPLIER_EXPORTS
 #include "Supplier.h"
-
+#include"pch.h"
 Supplier::Supplier(int id, const string& name, const string& contactInfo, const string& address)
     : id(id), name(name), contactInfo(contactInfo), address(address) {
 }

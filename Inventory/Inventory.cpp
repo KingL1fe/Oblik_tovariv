@@ -1,6 +1,6 @@
 #define INVENTORY_EXPORTS
 #include "Inventory.h"
-
+#include"pch.h"
 Inventory::Inventory() {}
 
 void Inventory::addProduct(const Product& product) {

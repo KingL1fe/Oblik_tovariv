@@ -1,6 +1,6 @@
 #define WAREHOUSE_EXPORTS
 #include "Warehouse.h"
-
+#include"pch.h"
 Warehouse::Warehouse(int id, const string& name, const string& address)
     : id(id), name(name), address(address) {
 }

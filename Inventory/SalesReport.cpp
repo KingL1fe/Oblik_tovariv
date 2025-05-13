@@ -1,6 +1,6 @@
 #define SALESREPORT_EXPORTS
 #include "SalesReport.h"
-
+#include"pch.h"
 SalesReport::SalesReport(int id, const string& period, double totalSales)
     : id(id), period(period), totalSales(totalSales) {
 }
