@@ -1,5 +1,5 @@
+#define ORDER_EXPORTS
 #include "Order.h"
-
 Order::Order(int id, const vector<Product>& products, const string& orderDate, const string& status)
     : id(id), productList(products), orderDate(orderDate), status(status) {
 }
@@ -16,8 +16,8 @@ void Order::setStatus(const string& newStatus) { status = newStatus; }
 
 double Order::getTotalAmount() const {
     double total = 0.0;
-    for (const auto& product : productList) {
-        total += product.getPrice() * product.getQuantity();
-    }
-    return total;
+	for (const auto& product : productList) {
+		total += product.getPrice() * product.getQuantity();
+	}
+	return total;
 }

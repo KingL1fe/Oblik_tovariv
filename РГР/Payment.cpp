@@ -1,5 +1,5 @@
+#define PAYMENT_EXPORTS
 #include "Payment.h"
-
 Payment::Payment(int id, const string& method, double amount, const string& date)
     : id(id), method(method), amount(amount), date(date) {
 }

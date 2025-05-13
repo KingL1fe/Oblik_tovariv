@@ -1,12 +1,19 @@
 #pragma once
+
+#ifdef SALESREPORT_EXPORTS
+#define SALESREPORT_API __declspec(dllexport)
+#else
+#define SALESREPORT_API __declspec(dllimport)
+#endif
+
 #include <string>
 
 using namespace std;
 
-class SalesReport {
+class SALESREPORT_API SalesReport {
 private:
     int id;
-    string period; // ���������: "������ 2025"
+    string period;
     double totalSales;
 
 public:

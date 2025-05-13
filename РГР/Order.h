@@ -1,11 +1,18 @@
 #pragma once
+
+#ifdef ORDER_EXPORTS
+#define ORDER_API __declspec(dllexport)
+#else
+#define ORDER_API __declspec(dllimport)
+#endif
+
 #include <vector>
 #include <string>
 #include "Product.h"
 
 using namespace std;
 
-class Order {
+class ORDER_API Order {
 private:
     int id;
     vector<Product> productList;

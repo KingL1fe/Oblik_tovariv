@@ -1,6 +1,5 @@
+#define INVENTORY_EXPORTS
 #include "Inventory.h"
-
-using namespace std;
 
 Inventory::Inventory() {}
 
@@ -33,4 +32,31 @@ vector<Product> Inventory::getAllProducts() const {
 
 void Inventory::clearInventory() {
     products.clear();
+}
+
+void Inventory::addCategory(const Category& category) {
+    categories.push_back(category);
+}
+
+bool Inventory::removeCategoryById(int id) {
+    for (auto it = categories.begin(); it != categories.end(); ++it) {
+        if (it->getId() == id) {
+            categories.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Category* Inventory::findCategoryById(int id) {
+    for (auto& category : categories) {
+        if (category.getId() == id) {
+            return &category;
+        }
+    }
+    return nullptr;
+}
+
+vector<Category> Inventory::getAllCategories() const {
+    return categories;
 }

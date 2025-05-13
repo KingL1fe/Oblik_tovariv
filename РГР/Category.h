@@ -1,21 +1,25 @@
 #pragma once
+
+#ifdef CATEGORY_EXPORTS
+#define CATEGORY_API __declspec(dllexport)
+#else
+#define CATEGORY_API __declspec(dllimport)
+#endif
+
 #include <string>
 
 using namespace std;
 
-class Category {
+class CATEGORY_API Category {
 private:
     int id;
     string name;
-    string description;
 
 public:
-    Category(int id, const string& name, const string& description);
+    Category(int id, const string& name);
 
     int getId() const;
     string getName() const;
-    string getDescription() const;
 
     void setName(const string& newName);
-    void setDescription(const string& newDescription);
 };

@@ -1,17 +1,24 @@
 #pragma once
+
+#ifdef STOCK_EXPORTS
+#define STOCK_API __declspec(dllexport)
+#else
+#define STOCK_API __declspec(dllimport)
+#endif
+
 #include "Product.h"
 
 using namespace std;
 
-class Stock {
+class STOCK_API Stock {
 private:
-    Product product;
+    Product* product;
     int availableQuantity;
 
 public:
-    Stock(const Product& product, int availableQuantity);
+    Stock(Product* product, int availableQuantity);
 
-    Product getProduct() const;
+    Product* getProduct() const;
     int getAvailableQuantity() const;
 
     void setAvailableQuantity(int newQuantity);

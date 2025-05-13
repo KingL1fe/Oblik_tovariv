@@ -1,9 +1,16 @@
 #pragma once
+
+#ifdef SUPPLIER_EXPORTS
+#define SUPPLIER_API __declspec(dllexport)
+#else
+#define SUPPLIER_API __declspec(dllimport)
+#endif
+
 #include <string>
 
 using namespace std;
 
-class Supplier {
+class SUPPLIER_API Supplier {
 private:
     int id;
     string name;

@@ -2,18 +2,10 @@
 
 #include "../РГР/Product.h"
 #include "../РГР/Inventory.h"
-#include "../РГР/Customer.h"
 #include "../РГР/Category.h"
-#include "../РГР/Discount.h"
-#include "../РГР/Invoice.h"
-#include "../РГР/Order.h"
-#include "../РГР/Payment.h"
-#include "../РГР/SalesReport.h"
-#include "../РГР/Stock.h"
-#include "../РГР/Supplier.h"
-#include "../РГР/Warehouse.h"
 #include "AddEditProductForm.h"
-#include <msclr/marshal_cppstd.h> // Додано для marshal_as
+#include "AddEditCategoryForm.h"
+#include <msclr/marshal_cppstd.h>
 
 namespace InventoryApp {
 
@@ -47,32 +39,17 @@ namespace InventoryApp {
     private: System::Windows::Forms::TabControl^ tabControl;
     private: System::Windows::Forms::TabPage^ tabProducts;
     private: System::Windows::Forms::TabPage^ tabCategories;
-    private: System::Windows::Forms::TabPage^ tabCustomers;
-    private: System::Windows::Forms::TabPage^ tabSuppliers;
-    private: System::Windows::Forms::TabPage^ tabOrders;
-    private: System::Windows::Forms::TabPage^ tabInvoices;
-    private: System::Windows::Forms::TabPage^ tabDiscounts;
-    private: System::Windows::Forms::TabPage^ tabPayments;
-    private: System::Windows::Forms::TabPage^ tabSalesReports;
-    private: System::Windows::Forms::TabPage^ tabStocks;
-    private: System::Windows::Forms::TabPage^ tabWarehouses;
     private: System::Windows::Forms::DataGridView^ dataGridViewProducts;
     private: System::Windows::Forms::DataGridView^ dataGridViewCategories;
-    private: System::Windows::Forms::DataGridView^ dataGridViewCustomers;
-    private: System::Windows::Forms::DataGridView^ dataGridViewSuppliers;
-    private: System::Windows::Forms::DataGridView^ dataGridViewOrders;
-    private: System::Windows::Forms::DataGridView^ dataGridViewInvoices;
-    private: System::Windows::Forms::DataGridView^ dataGridViewDiscounts;
-    private: System::Windows::Forms::DataGridView^ dataGridViewPayments;
-    private: System::Windows::Forms::DataGridView^ dataGridViewSalesReports;
-    private: System::Windows::Forms::DataGridView^ dataGridViewStocks;
-    private: System::Windows::Forms::DataGridView^ dataGridViewWarehouses;
     private: System::Windows::Forms::TextBox^ txtSearch;
     private: System::Windows::Forms::Button^ btnSearch;
     private: System::Windows::Forms::Button^ btnAddSample;
     private: System::Windows::Forms::Button^ btnAddProduct;
     private: System::Windows::Forms::Button^ btnEditProduct;
     private: System::Windows::Forms::Button^ btnDeleteProduct;
+    private: System::Windows::Forms::Button^ btnAddCategory;
+    private: System::Windows::Forms::Button^ btnEditCategory;
+    private: System::Windows::Forms::Button^ btnDeleteCategory;
     private: Inventory* inventory;
     private: System::ComponentModel::Container^ components;
 
@@ -82,54 +59,21 @@ namespace InventoryApp {
                this->tabControl = (gcnew System::Windows::Forms::TabControl());
                this->tabProducts = (gcnew System::Windows::Forms::TabPage());
                this->tabCategories = (gcnew System::Windows::Forms::TabPage());
-               this->tabCustomers = (gcnew System::Windows::Forms::TabPage());
-               this->tabSuppliers = (gcnew System::Windows::Forms::TabPage());
-               this->tabOrders = (gcnew System::Windows::Forms::TabPage());
-               this->tabInvoices = (gcnew System::Windows::Forms::TabPage());
-               this->tabDiscounts = (gcnew System::Windows::Forms::TabPage());
-               this->tabPayments = (gcnew System::Windows::Forms::TabPage());
-               this->tabSalesReports = (gcnew System::Windows::Forms::TabPage());
-               this->tabStocks = (gcnew System::Windows::Forms::TabPage());
-               this->tabWarehouses = (gcnew System::Windows::Forms::TabPage());
                this->dataGridViewProducts = (gcnew System::Windows::Forms::DataGridView());
                this->dataGridViewCategories = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewCustomers = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewSuppliers = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewOrders = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewInvoices = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewDiscounts = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewPayments = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewSalesReports = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewStocks = (gcnew System::Windows::Forms::DataGridView());
-               this->dataGridViewWarehouses = (gcnew System::Windows::Forms::DataGridView());
                this->txtSearch = (gcnew System::Windows::Forms::TextBox());
                this->btnSearch = (gcnew System::Windows::Forms::Button());
                this->btnAddSample = (gcnew System::Windows::Forms::Button());
                this->btnAddProduct = (gcnew System::Windows::Forms::Button());
                this->btnEditProduct = (gcnew System::Windows::Forms::Button());
                this->btnDeleteProduct = (gcnew System::Windows::Forms::Button());
+               this->btnAddCategory = (gcnew System::Windows::Forms::Button());
+               this->btnEditCategory = (gcnew System::Windows::Forms::Button());
+               this->btnDeleteCategory = (gcnew System::Windows::Forms::Button());
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCustomers))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewSuppliers))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewOrders))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewInvoices))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewDiscounts))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewPayments))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewSalesReports))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewStocks))->BeginInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewWarehouses))->BeginInit();
                this->tabProducts->SuspendLayout();
                this->tabCategories->SuspendLayout();
-               this->tabCustomers->SuspendLayout();
-               this->tabSuppliers->SuspendLayout();
-               this->tabOrders->SuspendLayout();
-               this->tabInvoices->SuspendLayout();
-               this->tabDiscounts->SuspendLayout();
-               this->tabPayments->SuspendLayout();
-               this->tabSalesReports->SuspendLayout();
-               this->tabStocks->SuspendLayout();
-               this->tabWarehouses->SuspendLayout();
                this->tabControl->SuspendLayout();
                this->SuspendLayout();
 
@@ -141,15 +85,6 @@ namespace InventoryApp {
                this->tabControl->TabIndex = 0;
                this->tabControl->Controls->Add(this->tabProducts);
                this->tabControl->Controls->Add(this->tabCategories);
-               this->tabControl->Controls->Add(this->tabCustomers);
-               this->tabControl->Controls->Add(this->tabSuppliers);
-               this->tabControl->Controls->Add(this->tabOrders);
-               this->tabControl->Controls->Add(this->tabInvoices);
-               this->tabControl->Controls->Add(this->tabDiscounts);
-               this->tabControl->Controls->Add(this->tabPayments);
-               this->tabControl->Controls->Add(this->tabSalesReports);
-               this->tabControl->Controls->Add(this->tabStocks);
-               this->tabControl->Controls->Add(this->tabWarehouses);
 
                // tabProducts
                this->tabProducts->Controls->Add(this->btnDeleteProduct);
@@ -164,6 +99,9 @@ namespace InventoryApp {
                this->tabProducts->Text = L"Продукти";
 
                // tabCategories
+               this->tabCategories->Controls->Add(this->btnDeleteCategory);
+               this->tabCategories->Controls->Add(this->btnEditCategory);
+               this->tabCategories->Controls->Add(this->btnAddCategory);
                this->tabCategories->Controls->Add(this->dataGridViewCategories);
                this->tabCategories->Location = System::Drawing::Point(4, 22);
                this->tabCategories->Name = L"tabCategories";
@@ -171,87 +109,6 @@ namespace InventoryApp {
                this->tabCategories->Size = System::Drawing::Size(552, 274);
                this->tabCategories->TabIndex = 1;
                this->tabCategories->Text = L"Категорії";
-
-               // tabCustomers
-               this->tabCustomers->Controls->Add(this->dataGridViewCustomers);
-               this->tabCustomers->Location = System::Drawing::Point(4, 22);
-               this->tabCustomers->Name = L"tabCustomers";
-               this->tabCustomers->Padding = System::Windows::Forms::Padding(3);
-               this->tabCustomers->Size = System::Drawing::Size(552, 274);
-               this->tabCustomers->TabIndex = 2;
-               this->tabCustomers->Text = L"Клієнти";
-
-               // tabSuppliers
-               this->tabSuppliers->Controls->Add(this->dataGridViewSuppliers);
-               this->tabSuppliers->Location = System::Drawing::Point(4, 22);
-               this->tabSuppliers->Name = L"tabSuppliers";
-               this->tabSuppliers->Padding = System::Windows::Forms::Padding(3);
-               this->tabSuppliers->Size = System::Drawing::Size(552, 274);
-               this->tabSuppliers->TabIndex = 3;
-               this->tabSuppliers->Text = L"Постачальники";
-
-               // tabOrders
-               this->tabOrders->Controls->Add(this->dataGridViewOrders);
-               this->tabOrders->Location = System::Drawing::Point(4, 22);
-               this->tabOrders->Name = L"tabOrders";
-               this->tabOrders->Padding = System::Windows::Forms::Padding(3);
-               this->tabOrders->Size = System::Drawing::Size(552, 274);
-               this->tabOrders->TabIndex = 4;
-               this->tabOrders->Text = L"Замовлення";
-
-               // tabInvoices
-               this->tabInvoices->Controls->Add(this->dataGridViewInvoices);
-               this->tabInvoices->Location = System::Drawing::Point(4, 22);
-               this->tabInvoices->Name = L"tabInvoices";
-               this->tabInvoices->Padding = System::Windows::Forms::Padding(3);
-               this->tabInvoices->Size = System::Drawing::Size(552, 274);
-               this->tabInvoices->TabIndex = 5;
-               this->tabInvoices->Text = L"Рахунки";
-
-               // tabDiscounts
-               this->tabDiscounts->Controls->Add(this->dataGridViewDiscounts);
-               this->tabDiscounts->Location = System::Drawing::Point(4, 22);
-               this->tabDiscounts->Name = L"tabDiscounts";
-               this->tabDiscounts->Padding = System::Windows::Forms::Padding(3);
-               this->tabDiscounts->Size = System::Drawing::Size(552, 274);
-               this->tabDiscounts->TabIndex = 6;
-               this->tabDiscounts->Text = L"Знижки";
-
-               // tabPayments
-               this->tabPayments->Controls->Add(this->dataGridViewPayments);
-               this->tabPayments->Location = System::Drawing::Point(4, 22);
-               this->tabPayments->Name = L"tabPayments";
-               this->tabPayments->Padding = System::Windows::Forms::Padding(3);
-               this->tabPayments->Size = System::Drawing::Size(552, 274);
-               this->tabPayments->TabIndex = 7;
-               this->tabPayments->Text = L"Платежі";
-
-               // tabSalesReports
-               this->tabSalesReports->Controls->Add(this->dataGridViewSalesReports);
-               this->tabSalesReports->Location = System::Drawing::Point(4, 22);
-               this->tabSalesReports->Name = L"tabSalesReports";
-               this->tabSalesReports->Padding = System::Windows::Forms::Padding(3);
-               this->tabSalesReports->Size = System::Drawing::Size(552, 274);
-               this->tabSalesReports->TabIndex = 8;
-               this->tabSalesReports->Text = L"Звіти про продажі";
-
-               // tabStocks
-               this->tabStocks->Controls->Add(this->dataGridViewStocks);
-               this->tabStocks->Location = System::Drawing::Point(4, 22);
-               this->tabStocks->Name = L"tabStocks";
-               this->tabStocks->Padding = System::Windows::Forms::Padding(3);
-               this->tabStocks->Size = System::Drawing::Size(552, 274);
-               this->tabStocks->TabIndex = 9;
-               this->tabStocks->Text = L"Запаси";
-
-               // tabWarehouses
-               this->tabWarehouses->Controls->Add(this->dataGridViewWarehouses);
-               this->tabWarehouses->Location = System::Drawing::Point(4, 22);
-               this->tabWarehouses->Name = L"tabWarehouses";
-               this->tabWarehouses->Padding = System::Windows::Forms::Padding(3);
-               this->tabWarehouses->Size = System::Drawing::Size(552, 274);
-               this->tabWarehouses->TabIndex = 10;
-               this->tabWarehouses->Text = L"Склади";
 
                // dataGridViewProducts
                this->dataGridViewProducts->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
@@ -266,71 +123,10 @@ namespace InventoryApp {
                this->dataGridViewCategories->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
                this->dataGridViewCategories->Location = System::Drawing::Point(6, 6);
                this->dataGridViewCategories->Name = L"dataGridViewCategories";
-               this->dataGridViewCategories->Size = System::Drawing::Size(540, 262);
+               this->dataGridViewCategories->Size = System::Drawing::Size(540, 200);
                this->dataGridViewCategories->TabIndex = 0;
-
-               // dataGridViewCustomers
-               this->dataGridViewCustomers->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewCustomers->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewCustomers->Name = L"dataGridViewCustomers";
-               this->dataGridViewCustomers->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewCustomers->TabIndex = 0;
-
-               // dataGridViewSuppliers
-               this->dataGridViewSuppliers->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewSuppliers->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewSuppliers->Name = L"dataGridViewSuppliers";
-               this->dataGridViewSuppliers->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewSuppliers->TabIndex = 0;
-
-               // dataGridViewOrders
-               this->dataGridViewOrders->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewOrders->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewOrders->Name = L"dataGridViewOrders";
-               this->dataGridViewOrders->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewOrders->TabIndex = 0;
-
-               // dataGridViewInvoices
-               this->dataGridViewInvoices->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewInvoices->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewInvoices->Name = L"dataGridViewInvoices";
-               this->dataGridViewInvoices->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewInvoices->TabIndex = 0;
-
-               // dataGridViewDiscounts
-               this->dataGridViewDiscounts->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewDiscounts->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewDiscounts->Name = L"dataGridViewDiscounts";
-               this->dataGridViewDiscounts->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewDiscounts->TabIndex = 0;
-
-               // dataGridViewPayments
-               this->dataGridViewPayments->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewPayments->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewPayments->Name = L"dataGridViewPayments";
-               this->dataGridViewPayments->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewPayments->TabIndex = 0;
-
-               // dataGridViewSalesReports
-               this->dataGridViewSalesReports->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewSalesReports->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewSalesReports->Name = L"dataGridViewSalesReports";
-               this->dataGridViewSalesReports->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewSalesReports->TabIndex = 0;
-
-               // dataGridViewStocks
-               this->dataGridViewStocks->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewStocks->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewStocks->Name = L"dataGridViewStocks";
-               this->dataGridViewStocks->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewStocks->TabIndex = 0;
-
-               // dataGridViewWarehouses
-               this->dataGridViewWarehouses->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->dataGridViewWarehouses->Location = System::Drawing::Point(6, 6);
-               this->dataGridViewWarehouses->Name = L"dataGridViewWarehouses";
-               this->dataGridViewWarehouses->Size = System::Drawing::Size(540, 262);
-               this->dataGridViewWarehouses->TabIndex = 0;
+               this->dataGridViewCategories->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
+               this->dataGridViewCategories->MultiSelect = false;
 
                // btnAddProduct
                this->btnAddProduct->Location = System::Drawing::Point(6, 212);
@@ -358,6 +154,33 @@ namespace InventoryApp {
                this->btnDeleteProduct->Text = L"Видалити";
                this->btnDeleteProduct->UseVisualStyleBackColor = true;
                this->btnDeleteProduct->Click += gcnew System::EventHandler(this, &InventoryApp::btnDeleteProduct_Click);
+
+               // btnAddCategory
+               this->btnAddCategory->Location = System::Drawing::Point(6, 212);
+               this->btnAddCategory->Name = L"btnAddCategory";
+               this->btnAddCategory->Size = System::Drawing::Size(100, 23);
+               this->btnAddCategory->TabIndex = 1;
+               this->btnAddCategory->Text = L"Додати";
+               this->btnAddCategory->UseVisualStyleBackColor = true;
+               this->btnAddCategory->Click += gcnew System::EventHandler(this, &InventoryApp::btnAddCategory_Click);
+
+               // btnEditCategory
+               this->btnEditCategory->Location = System::Drawing::Point(112, 212);
+               this->btnEditCategory->Name = L"btnEditCategory";
+               this->btnEditCategory->Size = System::Drawing::Size(100, 23);
+               this->btnEditCategory->TabIndex = 2;
+               this->btnEditCategory->Text = L"Редагувати";
+               this->btnEditCategory->UseVisualStyleBackColor = true;
+               this->btnEditCategory->Click += gcnew System::EventHandler(this, &InventoryApp::btnEditCategory_Click);
+
+               // btnDeleteCategory
+               this->btnDeleteCategory->Location = System::Drawing::Point(218, 212);
+               this->btnDeleteCategory->Name = L"btnDeleteCategory";
+               this->btnDeleteCategory->Size = System::Drawing::Size(100, 23);
+               this->btnDeleteCategory->TabIndex = 3;
+               this->btnDeleteCategory->Text = L"Видалити";
+               this->btnDeleteCategory->UseVisualStyleBackColor = true;
+               this->btnDeleteCategory->Click += gcnew System::EventHandler(this, &InventoryApp::btnDeleteCategory_Click);
 
                // txtSearch
                this->txtSearch->Location = System::Drawing::Point(12, 12);
@@ -395,26 +218,8 @@ namespace InventoryApp {
                this->Text = L"Додаток для інвентаризації";
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->EndInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCustomers))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewSuppliers))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewOrders))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewInvoices))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewDiscounts))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewPayments))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewSalesReports))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewStocks))->EndInit();
-               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewWarehouses))->EndInit();
                this->tabProducts->ResumeLayout(false);
                this->tabCategories->ResumeLayout(false);
-               this->tabCustomers->ResumeLayout(false);
-               this->tabSuppliers->ResumeLayout(false);
-               this->tabOrders->ResumeLayout(false);
-               this->tabInvoices->ResumeLayout(false);
-               this->tabDiscounts->ResumeLayout(false);
-               this->tabPayments->ResumeLayout(false);
-               this->tabSalesReports->ResumeLayout(false);
-               this->tabStocks->ResumeLayout(false);
-               this->tabWarehouses->ResumeLayout(false);
                this->tabControl->ResumeLayout(false);
                this->ResumeLayout(false);
                this->PerformLayout();
@@ -424,10 +229,13 @@ namespace InventoryApp {
     private:
         void LoadSampleData()
         {
-            inventory->addProduct(Product(1, "Laptop", 10, 999.99));
-            inventory->addProduct(Product(2, "Mouse", 50, 19.99));
-            inventory->addProduct(Product(3, "Keyboard", 20, 49.99));
+            inventory->addCategory(Category(1, std::string("Електроніка")));
+            inventory->addCategory(Category(2, std::string("Периферія")));
+            inventory->addProduct(Product(1, std::string("Laptop"), 10, 999.99, 1));
+            inventory->addProduct(Product(2, std::string("Mouse"), 50, 19.99, 2));
+            inventory->addProduct(Product(3, std::string("Keyboard"), 20, 49.99, 2));
             UpdateProductGrid();
+            UpdateCategoryGrid();
         }
 
         void UpdateProductGrid()
@@ -439,10 +247,25 @@ namespace InventoryApp {
             dataGridViewProducts->Columns->Add("Name", "Назва");
             dataGridViewProducts->Columns->Add("Quantity", "Кількість");
             dataGridViewProducts->Columns->Add("Price", "Ціна");
+            dataGridViewProducts->Columns->Add("CategoryId", "ID Категорії");
 
             for (const auto& product : inventory->getAllProducts())
             {
-                dataGridViewProducts->Rows->Add(product.getId(), gcnew String(product.getName().c_str()), product.getQuantity(), product.getPrice());
+                dataGridViewProducts->Rows->Add(product.getId(), gcnew String(product.getName().c_str()), product.getQuantity(), product.getPrice(), product.getCategoryId());
+            }
+        }
+
+        void UpdateCategoryGrid()
+        {
+            dataGridViewCategories->Rows->Clear();
+            dataGridViewCategories->Columns->Clear();
+
+            dataGridViewCategories->Columns->Add("ID", "ID");
+            dataGridViewCategories->Columns->Add("Name", "Назва");
+
+            for (const auto& category : inventory->getAllCategories())
+            {
+                dataGridViewCategories->Rows->Add(category.getId(), gcnew String(category.getName().c_str()));
             }
         }
 
@@ -455,7 +278,7 @@ namespace InventoryApp {
             String^ name = gcnew String(product.getName().c_str());
             if (name->ToLower()->Contains(keyword))
             {
-                dataGridViewProducts->Rows->Add(product.getId(), name, product.getQuantity(), product.getPrice());
+                dataGridViewProducts->Rows->Add(product.getId(), name, product.getQuantity(), product.getPrice(), product.getCategoryId());
             }
         }
     }
@@ -465,10 +288,10 @@ namespace InventoryApp {
     }
 
     private: System::Void btnAddProduct_Click(System::Object^ sender, System::EventArgs^ e) {
-        AddEditProductForm^ form = gcnew AddEditProductForm(inventory->getAllProducts().size() + 1);
+        AddEditProductForm^ form = gcnew AddEditProductForm(inventory->getAllProducts().size() + 1, inventory);
         if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
         {
-            Product product(form->ProductId, msclr::interop::marshal_as<std::string>(form->ProductName), form->ProductQuantity, form->ProductPrice);
+            Product product(form->ProductId, msclr::interop::marshal_as<std::string>(form->ProductName), form->ProductQuantity, form->ProductPrice, form->ProductCategoryId);
             inventory->addProduct(product);
             UpdateProductGrid();
         }
@@ -481,12 +304,13 @@ namespace InventoryApp {
             Product* product = inventory->findProductById(id);
             if (product)
             {
-                AddEditProductForm^ form = gcnew AddEditProductForm(id, gcnew String(product->getName().c_str()), product->getQuantity(), product->getPrice());
+                AddEditProductForm^ form = gcnew AddEditProductForm(id, gcnew String(product->getName().c_str()), product->getQuantity(), product->getPrice(), product->getCategoryId(), inventory);
                 if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
                 {
                     product->setName(msclr::interop::marshal_as<std::string>(form->ProductName));
                     product->setQuantity(form->ProductQuantity);
                     product->setPrice(form->ProductPrice);
+                    product->setCategoryId(form->ProductCategoryId);
                     UpdateProductGrid();
                 }
             }
@@ -510,6 +334,67 @@ namespace InventoryApp {
         else
         {
             MessageBox::Show(L"Будь ласка, виберіть продукт для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+    private: System::Void btnAddCategory_Click(System::Object^ sender, System::EventArgs^ e) {
+        AddEditCategoryForm^ form = gcnew AddEditCategoryForm(inventory->getAllCategories().size() + 1);
+        if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+        {
+            Category category(form->CategoryId, msclr::interop::marshal_as<std::string>(form->CategoryName));
+            inventory->addCategory(category);
+            UpdateCategoryGrid();
+        }
+    }
+
+    private: System::Void btnEditCategory_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewCategories->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewCategories->SelectedRows[0]->Cells[0]->Value);
+            Category* category = inventory->findCategoryById(id);
+            if (category)
+            {
+                AddEditCategoryForm^ form = gcnew AddEditCategoryForm(id, gcnew String(category->getName().c_str()));
+                if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+                {
+                    category->setName(msclr::interop::marshal_as<std::string>(form->CategoryName));
+                    UpdateCategoryGrid();
+                }
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть категорію для редагування.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+    private: System::Void btnDeleteCategory_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewCategories->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewCategories->SelectedRows[0]->Cells[0]->Value);
+            bool hasProducts = false;
+            for (const auto& product : inventory->getAllProducts())
+            {
+                if (product.getCategoryId() == id)
+                {
+                    hasProducts = true;
+                    break;
+                }
+            }
+            if (hasProducts)
+            {
+                MessageBox::Show(L"Неможливо видалити категорію, оскільки до неї прив’язані продукти.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                return;
+            }
+            if (MessageBox::Show(L"Ви впевнені, що хочете видалити цю категорію?", L"Підтвердження", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+            {
+                inventory->removeCategoryById(id);
+                UpdateCategoryGrid();
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть категорію для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
         }
     }
     };

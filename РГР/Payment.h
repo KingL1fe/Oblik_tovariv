@@ -1,12 +1,19 @@
 #pragma once
+
+#ifdef PAYMENT_EXPORTS
+#define PAYMENT_API __declspec(dllexport)
+#else
+#define PAYMENT_API __declspec(dllimport)
+#endif
+
 #include <string>
 
 using namespace std;
 
-class Payment {
+class PAYMENT_API Payment {
 private:
     int id;
-    string method; // ���������: "������", "�����"
+    string method;
     double amount;
     string date;
 

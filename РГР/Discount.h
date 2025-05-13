@@ -1,9 +1,15 @@
 #pragma once
 #include <string>
 
+#ifdef DISCOUNT_EXPORTS
+#define DISCOUNT_API __declspec(dllexport)
+#else
+#define DISCOUNT_API __declspec(dllimport)
+#endif
+
 using namespace std;
 
-class Discount {
+class DISCOUNT_API Discount {
 private:
     int id;
     string name;

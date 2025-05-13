@@ -3,9 +3,15 @@
 #include "Customer.h"
 #include "Order.h"
 
+#ifdef INVOICE_EXPORTS
+#define INVOICE_API __declspec(dllexport)
+#else
+#define INVOICE_API __declspec(dllimport)
+#endif
+
 using namespace std;
 
-class Invoice {
+class INVOICE_API Invoice {
 private:
     int invoiceNumber;
     Customer customer;

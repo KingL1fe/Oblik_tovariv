@@ -1,9 +1,15 @@
 #pragma once
 #include <string>
 
+#ifdef CUSTOMER_EXPORTS
+#define CUSTOMER_API __declspec(dllexport)
+#else
+#define CUSTOMER_API __declspec(dllimport)
+#endif
+
 using namespace std;
 
-class Customer {
+class CUSTOMER_API Customer {
 private:
     int id;
     string name;

@@ -1,9 +1,16 @@
 #pragma once
+
+#ifdef WAREHOUSE_EXPORTS
+#define WAREHOUSE_API __declspec(dllexport)
+#else
+#define WAREHOUSE_API __declspec(dllimport)
+#endif
+
 #include <string>
 
 using namespace std;
 
-class Warehouse {
+class WAREHOUSE_API Warehouse {
 private:
     int id;
     string name;

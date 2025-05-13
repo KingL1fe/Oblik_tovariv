@@ -1,24 +1,11 @@
+#define CATEGORY_EXPORTS
 #include "Category.h"
-Category::Category(int id, const string& name, const string& description)
-    : id(id), name(name), description(description) {
+
+Category::Category(int id, const string& name)
+    : id(id), name(name) {
 }
 
-int Category::getId() const {
-    return id;
-}
+int Category::getId() const { return id; }
+string Category::getName() const { return name; }
 
-string Category::getName() const {
-    return name;
-}
-
-string Category::getDescription() const {
-    return description;
-}
-
-void Category::setName(const string& newName) {
-    name = newName;
-}
-
-void Category::setDescription(const string& newDescription) {
-    description = newDescription;
-}
+void Category::setName(const string& newName) { name = newName; }
