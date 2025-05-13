@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace Oblik_tovariv {
+namespace Inventoryapp {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -10,12 +10,12 @@ namespace Oblik_tovariv {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Summary for App
+	/// Summary for InventoryApp
 	/// </summary>
-	public ref class App : public System::Windows::Forms::Form
+	public ref class InventoryApp : public System::Windows::Forms::Form
 	{
 	public:
-		App(void)
+		InventoryApp(void)
 		{
 			InitializeComponent();
 			//
@@ -27,7 +27,7 @@ namespace Oblik_tovariv {
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		~App()
+		~InventoryApp()
 		{
 			if (components)
 			{
@@ -50,7 +50,7 @@ namespace Oblik_tovariv {
 		{
 			this->components = gcnew System::ComponentModel::Container();
 			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"App";
+			this->Text = L"InventoryApp";
 			this->Padding = System::Windows::Forms::Padding(0);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 		}

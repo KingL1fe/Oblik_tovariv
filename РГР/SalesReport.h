@@ -6,7 +6,7 @@ using namespace std;
 class SalesReport {
 private:
     int id;
-    string period; // Наприклад: "Квітень 2025"
+    string period; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: "пїЅпїЅпїЅпїЅпїЅпїЅ 2025"
     double totalSales;
 
 public:

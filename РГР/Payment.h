@@ -6,7 +6,7 @@ using namespace std;
 class Payment {
 private:
     int id;
-    string method; // Наприклад: "Готівка", "Карта"
+    string method; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: "пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ"
     double amount;
     string date;
 
