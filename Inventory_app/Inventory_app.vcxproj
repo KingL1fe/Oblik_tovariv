@@ -121,6 +121,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddEditProductForm.h" />
     <ClInclude Include="InventoryApp.h">
       <FileType>CppForm</FileType>
     </ClInclude>
