@@ -24,7 +24,10 @@ namespace InventoryApp {
         {
             InitializeComponent();
             inventory = new Inventory();
-            LoadSampleData();
+            // Завантаження даних із файлу при запуску
+            inventory->loadFromFile("inventory_data.txt");
+            UpdateProductGrid();
+            UpdateCategoryGrid();
         }
 
     protected:
@@ -50,6 +53,8 @@ namespace InventoryApp {
     private: System::Windows::Forms::Button^ btnAddCategory;
     private: System::Windows::Forms::Button^ btnEditCategory;
     private: System::Windows::Forms::Button^ btnDeleteCategory;
+    private: System::Windows::Forms::Button^ btnSave;
+    private: System::Windows::Forms::Button^ btnLoad;
     private: Inventory* inventory;
     private: System::ComponentModel::Container^ components;
 
@@ -70,6 +75,8 @@ namespace InventoryApp {
                this->btnAddCategory = (gcnew System::Windows::Forms::Button());
                this->btnEditCategory = (gcnew System::Windows::Forms::Button());
                this->btnDeleteCategory = (gcnew System::Windows::Forms::Button());
+               this->btnSave = (gcnew System::Windows::Forms::Button());
+               this->btnLoad = (gcnew System::Windows::Forms::Button());
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->BeginInit();
                this->tabProducts->SuspendLayout();
@@ -198,7 +205,7 @@ namespace InventoryApp {
                this->btnSearch->Click += gcnew System::EventHandler(this, &InventoryApp::btnSearch_Click);
 
                // btnAddSample
-               this->btnAddSample->Location = System::Drawing::Point(497, 10);
+               this->btnAddSample->Location = System::Drawing::Point(249, 10);
                this->btnAddSample->Name = L"btnAddSample";
                this->btnAddSample->Size = System::Drawing::Size(75, 23);
                this->btnAddSample->TabIndex = 3;
@@ -206,10 +213,30 @@ namespace InventoryApp {
                this->btnAddSample->UseVisualStyleBackColor = true;
                this->btnAddSample->Click += gcnew System::EventHandler(this, &InventoryApp::btnAddSample_Click);
 
+               // btnSave
+               this->btnSave->Location = System::Drawing::Point(330, 10);
+               this->btnSave->Name = L"btnSave";
+               this->btnSave->Size = System::Drawing::Size(75, 23);
+               this->btnSave->TabIndex = 4;
+               this->btnSave->Text = L"Зберегти";
+               this->btnSave->UseVisualStyleBackColor = true;
+               this->btnSave->Click += gcnew System::EventHandler(this, &InventoryApp::btnSave_Click);
+
+               // btnLoad
+               this->btnLoad->Location = System::Drawing::Point(411, 10);
+               this->btnLoad->Name = L"btnLoad";
+               this->btnLoad->Size = System::Drawing::Size(75, 23);
+               this->btnLoad->TabIndex = 5;
+               this->btnLoad->Text = L"Завантажити";
+               this->btnLoad->UseVisualStyleBackColor = true;
+               this->btnLoad->Click += gcnew System::EventHandler(this, &InventoryApp::btnLoad_Click);
+
                // InventoryApp
                this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
                this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
                this->ClientSize = System::Drawing::Size(584, 361);
+               this->Controls->Add(this->btnLoad);
+               this->Controls->Add(this->btnSave);
                this->Controls->Add(this->btnAddSample);
                this->Controls->Add(this->btnSearch);
                this->Controls->Add(this->txtSearch);
@@ -249,7 +276,7 @@ namespace InventoryApp {
             dataGridViewProducts->Columns->Add("Price", "Ціна");
             dataGridViewProducts->Columns->Add("CategoryId", "ID Категорії");
 
-            for (const auto& product : inventory->getAllProducts())
+            for (const Product& product : inventory->getAllProducts())
             {
                 dataGridViewProducts->Rows->Add(product.getId(), gcnew String(product.getName().c_str()), product.getQuantity(), product.getPrice(), product.getCategoryId());
             }
@@ -263,7 +290,7 @@ namespace InventoryApp {
             dataGridViewCategories->Columns->Add("ID", "ID");
             dataGridViewCategories->Columns->Add("Name", "Назва");
 
-            for (const auto& category : inventory->getAllCategories())
+            for (const Category& category : inventory->getAllCategories())
             {
                 dataGridViewCategories->Rows->Add(category.getId(), gcnew String(category.getName().c_str()));
             }
@@ -273,7 +300,7 @@ namespace InventoryApp {
         String^ keyword = txtSearch->Text->ToLower();
         dataGridViewProducts->Rows->Clear();
 
-        for (const auto& product : inventory->getAllProducts())
+        for (const Product& product : inventory->getAllProducts())
         {
             String^ name = gcnew String(product.getName().c_str());
             if (name->ToLower()->Contains(keyword))
@@ -373,7 +400,7 @@ namespace InventoryApp {
         {
             int id = Convert::ToInt32(dataGridViewCategories->SelectedRows[0]->Cells[0]->Value);
             bool hasProducts = false;
-            for (const auto& product : inventory->getAllProducts())
+            for (const Product& product : inventory->getAllProducts())
             {
                 if (product.getCategoryId() == id)
                 {
@@ -396,6 +423,18 @@ namespace InventoryApp {
         {
             MessageBox::Show(L"Будь ласка, виберіть категорію для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
         }
+    }
+
+    private: System::Void btnSave_Click(System::Object^ sender, System::EventArgs^ e) {
+        inventory->saveToFile("inventory_data.txt");
+        MessageBox::Show(L"Дані успішно збережено.", L"Успіх", MessageBoxButtons::OK, MessageBoxIcon::Information);
+    }
+
+    private: System::Void btnLoad_Click(System::Object^ sender, System::EventArgs^ e) {
+        inventory->loadFromFile("inventory_data.txt");
+        UpdateProductGrid();
+        UpdateCategoryGrid();
+        MessageBox::Show(L"Дані успішно завантажено.", L"Успіх", MessageBoxButtons::OK, MessageBoxIcon::Information);
     }
     };
 }

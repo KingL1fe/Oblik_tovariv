@@ -31,4 +31,7 @@ public:
     bool removeCategoryById(int id);
     Category* findCategoryById(int id);
     vector<Category> getAllCategories() const;
+
+    void saveToFile(const string& filename) const;
+    void loadFromFile(const string& filename);
 };

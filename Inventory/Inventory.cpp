@@ -1,5 +1,7 @@
 #define INVENTORY_EXPORTS
 #include "Inventory.h"
+#include <fstream>
+#include <sstream>
 
 Inventory::Inventory() {}
 
@@ -59,4 +61,78 @@ Category* Inventory::findCategoryById(int id) {
 
 vector<Category> Inventory::getAllCategories() const {
     return categories;
+}
+
+void Inventory::saveToFile(const string& filename) const {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        return;
+    }
+
+    // Збереження категорій
+    file << "Categories:\n";
+    for (const Category& category : categories) {
+        file << category.getId() << ";" << category.getName() << "\n";
+    }
+
+    // Збереження продуктів
+    file << "Products:\n";
+    for (const Product& product : products) {
+        file << product.getId() << ";" << product.getName() << ";"
+            << product.getQuantity() << ";" << product.getPrice() << ";"
+            << product.getCategoryId() << "\n";
+    }
+
+    file.close();
+}
+
+void Inventory::loadFromFile(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        return;
+    }
+
+    products.clear();
+    categories.clear();
+    string line;
+    bool readingCategories = false;
+    bool readingProducts = false;
+
+    while (getline(file, line)) {
+        if (line == "Categories:") {
+            readingCategories = true;
+            readingProducts = false;
+            continue;
+        }
+        else if (line == "Products:") {
+            readingCategories = false;
+            readingProducts = true;
+            continue;
+        }
+
+        if (readingCategories && !line.empty()) {
+            stringstream ss(line);
+            string idStr, name;
+            getline(ss, idStr, ';');
+            getline(ss, name);
+            int id = stoi(idStr);
+            categories.push_back(Category(id, name));
+        }
+        else if (readingProducts && !line.empty()) {
+            stringstream ss(line);
+            string idStr, name, quantityStr, priceStr, categoryIdStr;
+            getline(ss, idStr, ';');
+            getline(ss, name, ';');
+            getline(ss, quantityStr, ';');
+            getline(ss, priceStr, ';');
+            getline(ss, categoryIdStr);
+            int id = stoi(idStr);
+            int quantity = stoi(quantityStr);
+            double price = stod(priceStr);
+            int categoryId = stoi(categoryIdStr);
+            products.push_back(Product(id, name, quantity, price, categoryId));
+        }
+    }
+
+    file.close();
 }
