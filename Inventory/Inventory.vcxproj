@@ -108,7 +108,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;INVENTORY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WAREHOUSE_EXPORTS;SUPPLIER_EXPORTS;STOCK_EXPORTS;SALESREPORT_EXPORTS;PAYMENT_EXPORTS;ORDER_EXPORTS;INVOICE_EXPORTS;DISCOUNT_EXPORTS;CUSTOMER_EXPORTS;PRODUCT_EXPORTS;INVENTORY_EXPORTS;CATEGORY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>

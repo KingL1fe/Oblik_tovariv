@@ -1,25 +1,28 @@
 #pragma once
+
+#ifdef WAREHOUSE_EXPORTS
+#define WAREHOUSE_API __declspec(dllexport)
+#else
+#define WAREHOUSE_API __declspec(dllimport)
+#endif
+
 #include <string>
 
 using namespace std;
 
-#define WAREHOUSE_EXPORTS
-extern "C" {
+class WAREHOUSE_API Warehouse {
+private:
+    int id;
+    string name;
+    string address;
 
-    class Warehouse {
-    private:
-        int id;
-        string name;
-        string address;
+public:
+    Warehouse(int id, const string& name, const string& address);
 
-    public:
-        Warehouse(int id, const string& name, const string& address);
+    int getId() const;
+    string getName() const;
+    string getAddress() const;
 
-        int getId() const;
-        string getName() const;
-        string getAddress() const;
-
-        void setName(const string& newName);
-        void setAddress(const string& newAddress);
-    };
-}
+    void setName(const string& newName);
+    void setAddress(const string& newAddress);
+};

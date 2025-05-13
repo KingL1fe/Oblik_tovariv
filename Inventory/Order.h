@@ -1,13 +1,14 @@
 #pragma once
-#include <vector>
-#include <string>
-#include "Product.h"
 
 #ifdef ORDER_EXPORTS
 #define ORDER_API __declspec(dllexport)
 #else
 #define ORDER_API __declspec(dllimport)
 #endif
+
+#include <vector>
+#include <string>
+#include "Product.h"
 
 using namespace std;
 
