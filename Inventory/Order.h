@@ -6,27 +6,34 @@
 #define ORDER_API __declspec(dllimport)
 #endif
 
-#include <vector>
 #include <string>
-#include "Product.h"
+#include <vector>
+#include <ctime>
 
 using namespace std;
 
 class ORDER_API Order {
 private:
     int id;
-    vector<Product> productList;
+    int customerId;
     string orderDate;
     string status;
+    vector<pair<int, int>> productQuantities; // pair<productId, quantity>
+    double totalAmount;
 
 public:
-    Order(int id, const vector<Product>& products, const string& orderDate, const string& status);
+    Order(int id, int customerId, const string& orderDate, const string& status, const vector<pair<int, int>>& productQuantities, double totalAmount);
 
     int getId() const;
-    vector<Product> getProductList() const;
+    int getCustomerId() const;
     string getOrderDate() const;
     string getStatus() const;
-
-    void setStatus(const string& newStatus);
+    vector<pair<int, int>> getProductQuantities() const;
     double getTotalAmount() const;
+
+    void setCustomerId(int newCustomerId);
+    void setOrderDate(const string& newOrderDate);
+    void setStatus(const string& newStatus);
+    void setProductQuantities(const vector<pair<int, int>>& newProductQuantities);
+    void setTotalAmount(double newTotalAmount);
 };

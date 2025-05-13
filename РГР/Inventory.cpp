@@ -117,6 +117,33 @@ vector<Supplier> Inventory::getAllSuppliers() const {
     return suppliers;
 }
 
+void Inventory::addOrder(const Order& order) {
+    orders.push_back(order);
+}
+
+bool Inventory::removeOrderById(int id) {
+    for (auto it = orders.begin(); it != orders.end(); ++it) {
+        if (it->getId() == id) {
+            orders.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Order* Inventory::findOrderById(int id) {
+    for (auto& order : orders) {
+        if (order.getId() == id) {
+            return &order;
+        }
+    }
+    return nullptr;
+}
+
+vector<Order> Inventory::getAllOrders() const {
+    return orders;
+}
+
 void Inventory::saveToFile(const string& filename) const {
     ofstream file(filename);
     if (!file.is_open()) {
@@ -151,6 +178,20 @@ void Inventory::saveToFile(const string& filename) const {
             << supplier.getContactInfo() << ";" << supplier.getAddress() << "\n";
     }
 
+    // «береженн€ замовлень
+    file << "Orders:\n";
+    for (const Order& order : orders) {
+        file << order.getId() << ";" << order.getCustomerId() << ";"
+            << order.getOrderDate() << ";" << order.getStatus() << ";"
+            << order.getTotalAmount() << ";";
+        auto quantities = order.getProductQuantities();
+        for (size_t i = 0; i < quantities.size(); ++i) {
+            file << quantities[i].first << ":" << quantities[i].second;
+            if (i < quantities.size() - 1) file << ",";
+        }
+        file << "\n";
+    }
+
     file.close();
 }
 
@@ -164,11 +205,13 @@ void Inventory::loadFromFile(const string& filename) {
     categories.clear();
     customers.clear();
     suppliers.clear();
+    orders.clear();
     string line;
     bool readingCategories = false;
     bool readingProducts = false;
     bool readingCustomers = false;
     bool readingSuppliers = false;
+    bool readingOrders = false;
 
     while (getline(file, line)) {
         if (line == "Categories:") {
@@ -176,6 +219,7 @@ void Inventory::loadFromFile(const string& filename) {
             readingProducts = false;
             readingCustomers = false;
             readingSuppliers = false;
+            readingOrders = false;
             continue;
         }
         else if (line == "Products:") {
@@ -183,6 +227,7 @@ void Inventory::loadFromFile(const string& filename) {
             readingProducts = true;
             readingCustomers = false;
             readingSuppliers = false;
+            readingOrders = false;
             continue;
         }
         else if (line == "Customers:") {
@@ -190,6 +235,7 @@ void Inventory::loadFromFile(const string& filename) {
             readingProducts = false;
             readingCustomers = true;
             readingSuppliers = false;
+            readingOrders = false;
             continue;
         }
         else if (line == "Suppliers:") {
@@ -197,6 +243,15 @@ void Inventory::loadFromFile(const string& filename) {
             readingProducts = false;
             readingCustomers = false;
             readingSuppliers = true;
+            readingOrders = false;
+            continue;
+        }
+        else if (line == "Orders:") {
+            readingCategories = false;
+            readingProducts = false;
+            readingCustomers = false;
+            readingSuppliers = false;
+            readingOrders = true;
             continue;
         }
 
@@ -241,6 +296,35 @@ void Inventory::loadFromFile(const string& filename) {
             getline(ss, address);
             int id = stoi(idStr);
             suppliers.push_back(Supplier(id, name, contactInfo, address));
+        }
+        else if (readingOrders && !line.empty()) {
+            stringstream ss(line);
+            string idStr, customerIdStr, orderDate, status, totalAmountStr, quantitiesStr;
+            getline(ss, idStr, ';');
+            getline(ss, customerIdStr, ';');
+            getline(ss, orderDate, ';');
+            getline(ss, status, ';');
+            getline(ss, totalAmountStr, ';');
+            getline(ss, quantitiesStr);
+
+            int id = stoi(idStr);
+            int customerId = stoi(customerIdStr);
+            double totalAmount = stod(totalAmountStr);
+
+            vector<pair<int, int>> productQuantities;
+            stringstream quantitiesSS(quantitiesStr);
+            string quantityPair;
+            while (getline(quantitiesSS, quantityPair, ',')) {
+                stringstream pairSS(quantityPair);
+                string productIdStr, quantityStr;
+                getline(pairSS, productIdStr, ':');
+                getline(pairSS, quantityStr);
+                int productId = stoi(productIdStr);
+                int quantity = stoi(quantityStr);
+                productQuantities.push_back({ productId, quantity });
+            }
+
+            orders.push_back(Order(id, customerId, orderDate, status, productQuantities, totalAmount));
         }
     }
 

@@ -12,6 +12,7 @@
 #include "Category.h"
 #include "Customer.h"
 #include "Supplier.h"
+#include "Order.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ private:
     vector<Category> categories;
     vector<Customer> customers;
     vector<Supplier> suppliers;
+    vector<Order> orders;
 
 public:
     Inventory();
@@ -45,6 +47,11 @@ public:
     bool removeSupplierById(int id);
     Supplier* findSupplierById(int id);
     vector<Supplier> getAllSuppliers() const;
+
+    void addOrder(const Order& order);
+    bool removeOrderById(int id);
+    Order* findOrderById(int id);
+    vector<Order> getAllOrders() const;
 
     void saveToFile(const string& filename) const;
     void loadFromFile(const string& filename);

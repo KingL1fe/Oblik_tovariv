@@ -5,10 +5,12 @@
 #include "../РГР/Category.h"
 #include "../РГР/Customer.h"
 #include "../РГР/Supplier.h"
+#include "../РГР/Order.h"
 #include "AddEditProductForm.h"
 #include "AddEditCategoryForm.h"
 #include "AddEditCustomerForm.h"
 #include "AddEditSupplierForm.h"
+#include "AddEditOrderForm.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace InventoryApp {
@@ -19,6 +21,7 @@ namespace InventoryApp {
     using namespace System::Windows::Forms;
     using namespace System::Data;
     using namespace System::Drawing;
+    using namespace System::Collections::Generic;
     using namespace std;
 
     public ref class InventoryApp : public System::Windows::Forms::Form
@@ -34,6 +37,7 @@ namespace InventoryApp {
             UpdateCategoryGrid();
             UpdateCustomerGrid();
             UpdateSupplierGrid();
+            UpdateOrderGrid();
         }
 
     protected:
@@ -50,10 +54,12 @@ namespace InventoryApp {
     private: System::Windows::Forms::TabPage^ tabCategories;
     private: System::Windows::Forms::TabPage^ tabCustomers;
     private: System::Windows::Forms::TabPage^ tabSuppliers;
+    private: System::Windows::Forms::TabPage^ tabOrders;
     private: System::Windows::Forms::DataGridView^ dataGridViewProducts;
     private: System::Windows::Forms::DataGridView^ dataGridViewCategories;
     private: System::Windows::Forms::DataGridView^ dataGridViewCustomers;
     private: System::Windows::Forms::DataGridView^ dataGridViewSuppliers;
+    private: System::Windows::Forms::DataGridView^ dataGridViewOrders;
     private: System::Windows::Forms::TextBox^ txtSearch;
     private: System::Windows::Forms::Button^ btnSearch;
     private: System::Windows::Forms::Button^ btnAddSample;
@@ -69,6 +75,9 @@ namespace InventoryApp {
     private: System::Windows::Forms::Button^ btnAddSupplier;
     private: System::Windows::Forms::Button^ btnEditSupplier;
     private: System::Windows::Forms::Button^ btnDeleteSupplier;
+    private: System::Windows::Forms::Button^ btnAddOrder;
+    private: System::Windows::Forms::Button^ btnEditOrder;
+    private: System::Windows::Forms::Button^ btnDeleteOrder;
     private: System::Windows::Forms::Button^ btnSave;
     private: System::Windows::Forms::Button^ btnLoad;
     private: Inventory* inventory;
@@ -82,10 +91,12 @@ namespace InventoryApp {
                this->tabCategories = (gcnew System::Windows::Forms::TabPage());
                this->tabCustomers = (gcnew System::Windows::Forms::TabPage());
                this->tabSuppliers = (gcnew System::Windows::Forms::TabPage());
+               this->tabOrders = (gcnew System::Windows::Forms::TabPage());
                this->dataGridViewProducts = (gcnew System::Windows::Forms::DataGridView());
                this->dataGridViewCategories = (gcnew System::Windows::Forms::DataGridView());
                this->dataGridViewCustomers = (gcnew System::Windows::Forms::DataGridView());
                this->dataGridViewSuppliers = (gcnew System::Windows::Forms::DataGridView());
+               this->dataGridViewOrders = (gcnew System::Windows::Forms::DataGridView());
                this->txtSearch = (gcnew System::Windows::Forms::TextBox());
                this->btnSearch = (gcnew System::Windows::Forms::Button());
                this->btnAddSample = (gcnew System::Windows::Forms::Button());
@@ -101,16 +112,21 @@ namespace InventoryApp {
                this->btnAddSupplier = (gcnew System::Windows::Forms::Button());
                this->btnEditSupplier = (gcnew System::Windows::Forms::Button());
                this->btnDeleteSupplier = (gcnew System::Windows::Forms::Button());
+               this->btnAddOrder = (gcnew System::Windows::Forms::Button());
+               this->btnEditOrder = (gcnew System::Windows::Forms::Button());
+               this->btnDeleteOrder = (gcnew System::Windows::Forms::Button());
                this->btnSave = (gcnew System::Windows::Forms::Button());
                this->btnLoad = (gcnew System::Windows::Forms::Button());
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCustomers))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewSuppliers))->BeginInit();
+               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewOrders))->BeginInit();
                this->tabProducts->SuspendLayout();
                this->tabCategories->SuspendLayout();
                this->tabCustomers->SuspendLayout();
                this->tabSuppliers->SuspendLayout();
+               this->tabOrders->SuspendLayout();
                this->tabControl->SuspendLayout();
                this->SuspendLayout();
 
@@ -124,6 +140,7 @@ namespace InventoryApp {
                this->tabControl->Controls->Add(this->tabCategories);
                this->tabControl->Controls->Add(this->tabCustomers);
                this->tabControl->Controls->Add(this->tabSuppliers);
+               this->tabControl->Controls->Add(this->tabOrders);
 
                // tabProducts
                this->tabProducts->Controls->Add(this->btnDeleteProduct);
@@ -173,6 +190,18 @@ namespace InventoryApp {
                this->tabSuppliers->TabIndex = 3;
                this->tabSuppliers->Text = L"Постачальники";
 
+               // tabOrders
+               this->tabOrders->Controls->Add(this->btnDeleteOrder);
+               this->tabOrders->Controls->Add(this->btnEditOrder);
+               this->tabOrders->Controls->Add(this->btnAddOrder);
+               this->tabOrders->Controls->Add(this->dataGridViewOrders);
+               this->tabOrders->Location = System::Drawing::Point(4, 22);
+               this->tabOrders->Name = L"tabOrders";
+               this->tabOrders->Padding = System::Windows::Forms::Padding(3);
+               this->tabOrders->Size = System::Drawing::Size(552, 274);
+               this->tabOrders->TabIndex = 4;
+               this->tabOrders->Text = L"Замовлення";
+
                // dataGridViewProducts
                this->dataGridViewProducts->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
                this->dataGridViewProducts->Location = System::Drawing::Point(6, 6);
@@ -208,6 +237,15 @@ namespace InventoryApp {
                this->dataGridViewSuppliers->TabIndex = 0;
                this->dataGridViewSuppliers->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
                this->dataGridViewSuppliers->MultiSelect = false;
+
+               // dataGridViewOrders
+               this->dataGridViewOrders->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+               this->dataGridViewOrders->Location = System::Drawing::Point(6, 6);
+               this->dataGridViewOrders->Name = L"dataGridViewOrders";
+               this->dataGridViewOrders->Size = System::Drawing::Size(540, 200);
+               this->dataGridViewOrders->TabIndex = 0;
+               this->dataGridViewOrders->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
+               this->dataGridViewOrders->MultiSelect = false;
 
                // btnAddProduct
                this->btnAddProduct->Location = System::Drawing::Point(6, 212);
@@ -317,17 +355,44 @@ namespace InventoryApp {
                this->btnDeleteSupplier->UseVisualStyleBackColor = true;
                this->btnDeleteSupplier->Click += gcnew System::EventHandler(this, &InventoryApp::btnDeleteSupplier_Click);
 
+               // btnAddOrder
+               this->btnAddOrder->Location = System::Drawing::Point(6, 212);
+               this->btnAddOrder->Name = L"btnAddOrder";
+               this->btnAddOrder->Size = System::Drawing::Size(100, 23);
+               this->btnAddOrder->TabIndex = 1;
+               this->btnAddOrder->Text = L"Додати";
+               this->btnAddOrder->UseVisualStyleBackColor = true;
+               this->btnAddOrder->Click += gcnew System::EventHandler(this, &InventoryApp::btnAddOrder_Click);
+
+               // btnEditOrder
+               this->btnEditOrder->Location = System::Drawing::Point(112, 212);
+               this->btnEditOrder->Name = L"btnEditOrder";
+               this->btnEditOrder->Size = System::Drawing::Size(100, 23);
+               this->btnEditOrder->TabIndex = 2;
+               this->btnEditOrder->Text = L"Редагувати";
+               this->btnEditOrder->UseVisualStyleBackColor = true;
+               this->btnEditOrder->Click += gcnew System::EventHandler(this, &InventoryApp::btnEditOrder_Click);
+
+               // btnDeleteOrder
+               this->btnDeleteOrder->Location = System::Drawing::Point(218, 212);
+               this->btnDeleteOrder->Name = L"btnDeleteOrder";
+               this->btnDeleteOrder->Size = System::Drawing::Size(100, 23);
+               this->btnDeleteOrder->TabIndex = 3;
+               this->btnDeleteOrder->Text = L"Видалити";
+               this->btnDeleteOrder->UseVisualStyleBackColor = true;
+               this->btnDeleteOrder->Click += gcnew System::EventHandler(this, &InventoryApp::btnDeleteOrder_Click);
+
                // txtSearch
                this->txtSearch->Location = System::Drawing::Point(12, 12);
                this->txtSearch->Name = L"txtSearch";
                this->txtSearch->Size = System::Drawing::Size(150, 20);
-               this->txtSearch->TabIndex = 1;
+               this->txtSearch->TabIndex = 4;
 
                // btnSearch
                this->btnSearch->Location = System::Drawing::Point(168, 10);
                this->btnSearch->Name = L"btnSearch";
                this->btnSearch->Size = System::Drawing::Size(75, 23);
-               this->btnSearch->TabIndex = 2;
+               this->btnSearch->TabIndex = 5;
                this->btnSearch->Text = L"Пошук";
                this->btnSearch->UseVisualStyleBackColor = true;
                this->btnSearch->Click += gcnew System::EventHandler(this, &InventoryApp::btnSearch_Click);
@@ -336,7 +401,7 @@ namespace InventoryApp {
                this->btnAddSample->Location = System::Drawing::Point(249, 10);
                this->btnAddSample->Name = L"btnAddSample";
                this->btnAddSample->Size = System::Drawing::Size(75, 23);
-               this->btnAddSample->TabIndex = 3;
+               this->btnAddSample->TabIndex = 6;
                this->btnAddSample->Text = L"Додати зразок";
                this->btnAddSample->UseVisualStyleBackColor = true;
                this->btnAddSample->Click += gcnew System::EventHandler(this, &InventoryApp::btnAddSample_Click);
@@ -345,7 +410,7 @@ namespace InventoryApp {
                this->btnSave->Location = System::Drawing::Point(330, 10);
                this->btnSave->Name = L"btnSave";
                this->btnSave->Size = System::Drawing::Size(75, 23);
-               this->btnSave->TabIndex = 4;
+               this->btnSave->TabIndex = 7;
                this->btnSave->Text = L"Зберегти";
                this->btnSave->UseVisualStyleBackColor = true;
                this->btnSave->Click += gcnew System::EventHandler(this, &InventoryApp::btnSave_Click);
@@ -354,7 +419,7 @@ namespace InventoryApp {
                this->btnLoad->Location = System::Drawing::Point(411, 10);
                this->btnLoad->Name = L"btnLoad";
                this->btnLoad->Size = System::Drawing::Size(75, 23);
-               this->btnLoad->TabIndex = 5;
+               this->btnLoad->TabIndex = 8;
                this->btnLoad->Text = L"Завантажити";
                this->btnLoad->UseVisualStyleBackColor = true;
                this->btnLoad->Click += gcnew System::EventHandler(this, &InventoryApp::btnLoad_Click);
@@ -375,10 +440,12 @@ namespace InventoryApp {
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->EndInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCustomers))->EndInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewSuppliers))->EndInit();
+               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewOrders))->EndInit();
                this->tabProducts->ResumeLayout(false);
                this->tabCategories->ResumeLayout(false);
                this->tabCustomers->ResumeLayout(false);
                this->tabSuppliers->ResumeLayout(false);
+               this->tabOrders->ResumeLayout(false);
                this->tabControl->ResumeLayout(false);
                this->ResumeLayout(false);
                this->PerformLayout();
@@ -395,10 +462,13 @@ namespace InventoryApp {
             inventory->addProduct(Product(3, std::string("Keyboard"), 20, 49.99, 2));
             inventory->addCustomer(Customer(1, std::string("ТОВ Клієнт"), std::string("+380671234567"), std::string("вул. Шевченка, Київ")));
             inventory->addSupplier(Supplier(1, std::string("ТОВ Постачальник"), std::string("supplier@example.com"), std::string("вул. Лесі Українки, Львів")));
+            vector<pair<int, int>> orderProducts = { {1, 2}, {2, 5} }; // 2 laptops, 5 mice
+            inventory->addOrder(Order(1, 1, "2025-05-13", "Нове", orderProducts, 2099.93));
             UpdateProductGrid();
             UpdateCategoryGrid();
             UpdateCustomerGrid();
             UpdateSupplierGrid();
+            UpdateOrderGrid();
         }
 
         void UpdateProductGrid()
@@ -466,6 +536,26 @@ namespace InventoryApp {
             }
         }
 
+        void UpdateOrderGrid()
+        {
+            dataGridViewOrders->Rows->Clear();
+            dataGridViewOrders->Columns->Clear();
+
+            dataGridViewOrders->Columns->Add("ID", "ID");
+            dataGridViewOrders->Columns->Add("CustomerName", "Клієнт");
+            dataGridViewOrders->Columns->Add("OrderDate", "Дата");
+            dataGridViewOrders->Columns->Add("Status", "Статус");
+            dataGridViewOrders->Columns->Add("TotalAmount", "Сума");
+
+            for (const Order& order : inventory->getAllOrders())
+            {
+                Customer* customer = inventory->findCustomerById(order.getCustomerId());
+                String^ customerName = customer ? gcnew String(customer->getName().c_str()) : L"Невідомий";
+                dataGridViewOrders->Rows->Add(order.getId(), customerName,
+                    gcnew String(order.getOrderDate().c_str()), gcnew String(order.getStatus().c_str()), order.getTotalAmount());
+            }
+        }
+
     private: System::Void btnSearch_Click(System::Object^ sender, System::EventArgs^ e) {
         String^ keyword = txtSearch->Text->ToLower();
         dataGridViewProducts->Rows->Clear();
@@ -524,6 +614,21 @@ namespace InventoryApp {
         if (dataGridViewProducts->SelectedRows->Count > 0)
         {
             int id = Convert::ToInt32(dataGridViewProducts->SelectedRows[0]->Cells[0]->Value);
+            bool isUsedInOrders = false;
+            for (const Order& order : inventory->getAllOrders()) {
+                for (const auto& productQty : order.getProductQuantities()) {
+                    if (productQty.first == id) {
+                        isUsedInOrders = true;
+                        break;
+                    }
+                }
+                if (isUsedInOrders) break;
+            }
+            if (isUsedInOrders) {
+                MessageBox::Show(L"Неможливо видалити продукт, оскільки він використовується в замовленнях.",
+                    L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                return;
+            }
             if (MessageBox::Show(L"Ви впевнені, що хочете видалити цей продукт?", L"Підтвердження",
                 MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
             {
@@ -627,6 +732,7 @@ namespace InventoryApp {
                     customer->setContactInfo(msclr::interop::marshal_as<std::string>(form->CustomerContactInfo));
                     customer->setAddress(msclr::interop::marshal_as<std::string>(form->CustomerAddress));
                     UpdateCustomerGrid();
+                    UpdateOrderGrid(); // Оновлюємо замовлення, бо ім’я клієнта могло змінитися
                 }
             }
         }
@@ -640,6 +746,18 @@ namespace InventoryApp {
         if (dataGridViewCustomers->SelectedRows->Count > 0)
         {
             int id = Convert::ToInt32(dataGridViewCustomers->SelectedRows[0]->Cells[0]->Value);
+            bool hasOrders = false;
+            for (const Order& order : inventory->getAllOrders()) {
+                if (order.getCustomerId() == id) {
+                    hasOrders = true;
+                    break;
+                }
+            }
+            if (hasOrders) {
+                MessageBox::Show(L"Неможливо видалити клієнта, оскільки до нього прив’язані замовлення.",
+                    L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                return;
+            }
             if (MessageBox::Show(L"Ви впевнені, що хочете видалити цього клієнта?", L"Підтвердження",
                 MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
             {
@@ -706,6 +824,83 @@ namespace InventoryApp {
         }
     }
 
+    private: System::Void btnAddOrder_Click(System::Object^ sender, System::EventArgs^ e) {
+        AddEditOrderForm^ form = gcnew AddEditOrderForm(inventory->getAllOrders().size() + 1, inventory);
+        if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+        {
+            vector<pair<int, int>> productQuantities;
+            for each (Dictionary<String^, Object^> ^ item in form->ProductQuantities)
+            {
+                int productId = Convert::ToInt32(item["ProductId"]);
+                int quantity = Convert::ToInt32(item["Quantity"]);
+                productQuantities.push_back({ productId, quantity });
+            }
+            Order order(form->OrderId, form->CustomerId, msclr::interop::marshal_as<std::string>(form->OrderDate),
+                msclr::interop::marshal_as<std::string>(form->OrderStatus), productQuantities, form->TotalAmount);
+            inventory->addOrder(order);
+            UpdateOrderGrid();
+        }
+    }
+
+    private: System::Void btnEditOrder_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewOrders->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewOrders->SelectedRows[0]->Cells[0]->Value);
+            Order* order = inventory->findOrderById(id);
+            if (order)
+            {
+                List<Dictionary<String^, Object^>^>^ productQuantities = gcnew List<Dictionary<String^, Object^>^>();
+                for (const auto& pq : order->getProductQuantities())
+                {
+                    Dictionary<String^, Object^>^ item = gcnew Dictionary<String^, Object^>();
+                    item->Add("ProductId", pq.first);
+                    item->Add("Quantity", pq.second);
+                    productQuantities->Add(item);
+                }
+                AddEditOrderForm^ form = gcnew AddEditOrderForm(id, order->getCustomerId(),
+                    gcnew String(order->getOrderDate().c_str()), gcnew String(order->getStatus().c_str()),
+                    productQuantities, order->getTotalAmount(), inventory);
+                if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+                {
+                    vector<pair<int, int>> newProductQuantities;
+                    for each (Dictionary<String^, Object^> ^ item in form->ProductQuantities)
+                    {
+                        int productId = Convert::ToInt32(item["ProductId"]);
+                        int quantity = Convert::ToInt32(item["Quantity"]);
+                        newProductQuantities.push_back({ productId, quantity });
+                    }
+                    order->setCustomerId(form->CustomerId);
+                    order->setOrderDate(msclr::interop::marshal_as<std::string>(form->OrderDate));
+                    order->setStatus(msclr::interop::marshal_as<std::string>(form->OrderStatus));
+                    order->setProductQuantities(newProductQuantities);
+                    order->setTotalAmount(form->TotalAmount);
+                    UpdateOrderGrid();
+                }
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть замовлення для редагування.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+    private: System::Void btnDeleteOrder_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewOrders->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewOrders->SelectedRows[0]->Cells[0]->Value);
+            if (MessageBox::Show(L"Ви впевнені, що хочете видалити це замовлення?", L"Підтвердження",
+                MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+            {
+                inventory->removeOrderById(id);
+                UpdateOrderGrid();
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть замовлення для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
     private: System::Void btnSave_Click(System::Object^ sender, System::EventArgs^ e) {
         inventory->saveToFile("inventory_data.txt");
         MessageBox::Show(L"Дані успішно збережено.", L"Успіх", MessageBoxButtons::OK, MessageBoxIcon::Information);
@@ -717,6 +912,7 @@ namespace InventoryApp {
         UpdateCategoryGrid();
         UpdateCustomerGrid();
         UpdateSupplierGrid();
+        UpdateOrderGrid();
         MessageBox::Show(L"Дані успішно завантажено.", L"Успіх", MessageBoxButtons::OK, MessageBoxIcon::Information);
     }
     };

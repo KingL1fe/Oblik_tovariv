@@ -1,23 +1,19 @@
 #define ORDER_EXPORTS
 #include "Order.h"
-Order::Order(int id, const vector<Product>& products, const string& orderDate, const string& status)
-    : id(id), productList(products), orderDate(orderDate), status(status) {
+
+Order::Order(int id, int customerId, const string& orderDate, const string& status, const vector<pair<int, int>>& productQuantities, double totalAmount)
+    : id(id), customerId(customerId), orderDate(orderDate), status(status), productQuantities(productQuantities), totalAmount(totalAmount) {
 }
 
 int Order::getId() const { return id; }
-
-vector<Product> Order::getProductList() const { return productList; }
-
+int Order::getCustomerId() const { return customerId; }
 string Order::getOrderDate() const { return orderDate; }
-
 string Order::getStatus() const { return status; }
+vector<pair<int, int>> Order::getProductQuantities() const { return productQuantities; }
+double Order::getTotalAmount() const { return totalAmount; }
 
+void Order::setCustomerId(int newCustomerId) { customerId = newCustomerId; }
+void Order::setOrderDate(const string& newOrderDate) { orderDate = newOrderDate; }
 void Order::setStatus(const string& newStatus) { status = newStatus; }
-
-double Order::getTotalAmount() const {
-    double total = 0.0;
-	for (const auto& product : productList) {
-		total += product.getPrice() * product.getQuantity();
-	}
-	return total;
-}
+void Order::setProductQuantities(const vector<pair<int, int>>& newProductQuantities) { productQuantities = newProductQuantities; }
+void Order::setTotalAmount(double newTotalAmount) { totalAmount = newTotalAmount; }
