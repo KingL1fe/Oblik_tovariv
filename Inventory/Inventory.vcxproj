@@ -146,7 +146,13 @@
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Invoice.h" />
     <ClInclude Include="Order.h" />
+    <ClInclude Include="Payment.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Product.h" />
+    <ClInclude Include="SalesReport.h" />
+    <ClInclude Include="Stock.h" />
+    <ClInclude Include="Supplier.h" />
+    <ClInclude Include="Warehouse.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Category.cpp" />
@@ -156,12 +162,18 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Invoice.cpp" />
     <ClCompile Include="Order.cpp" />
+    <ClCompile Include="Payment.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Product.cpp" />
+    <ClCompile Include="SalesReport.cpp" />
+    <ClCompile Include="Stock.cpp" />
+    <ClCompile Include="Supplier.cpp" />
+    <ClCompile Include="Warehouse.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
