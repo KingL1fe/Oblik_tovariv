@@ -1,6 +1,5 @@
 #define INVOICE_EXPORTS
 #include "Invoice.h"
-#include"pch.h"
 Invoice::Invoice(int invoiceNumber, const Customer& customer, const Order& order, const string& dateIssued)
     : invoiceNumber(invoiceNumber), customer(customer), order(order), dateIssued(dateIssued) {
 }

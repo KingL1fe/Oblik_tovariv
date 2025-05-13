@@ -1,6 +1,5 @@
 #define CUSTOMER_EXPORTS
 #include "Customer.h"
-#include"pch.h"
 Customer::Customer(int id, const string& name, const string& contactInfo, const string& address)
     : id(id), name(name), contactInfo(contactInfo), address(address) {
 }

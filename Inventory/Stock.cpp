@@ -1,6 +1,5 @@
 #define STOCK_EXPORTS
 #include "Stock.h"
-#include"pch.h"
 Stock::Stock(Product* product, int availableQuantity)
     : product(product), availableQuantity(availableQuantity) {
 }

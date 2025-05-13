@@ -1,6 +1,5 @@
 #define PRODUCT_EXPORTS
 #include "Product.h"
-#include"pch.h"
 Product::Product(int id, const string& name, int quantity, double price)
     : id(id), name(name), quantity(quantity), price(price) {
 }

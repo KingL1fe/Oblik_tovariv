@@ -1,6 +1,5 @@
 #define ORDER_EXPORTS
 #include "Order.h"
-#include"pch.h"
 Order::Order(int id, const vector<Product>& products, const string& orderDate, const string& status)
     : id(id), productList(products), orderDate(orderDate), status(status) {
 }
