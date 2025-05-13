@@ -82,7 +82,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>"D:\навчання\ООП\РГР\Oblik_tovariv\x64\Debug\Inventory.lib"</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>"D:\навчання\ООП\РГР\Oblik_tovariv\x64\Debug"</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
