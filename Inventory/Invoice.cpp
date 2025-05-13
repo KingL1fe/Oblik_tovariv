@@ -11,3 +11,4 @@ string Invoice::getDateIssued() const { return dateIssued; }
 
 double Invoice::calculateTotal() const {
 	return order.getTotalAmount();
+}

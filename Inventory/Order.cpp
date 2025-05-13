@@ -16,4 +16,8 @@ void Order::setStatus(const string& newStatus) { status = newStatus; }
 
 double Order::getTotalAmount() const {
     double total = 0.0;
-    fo
+	for (const auto& product : productList) {
+		total += product.getPrice() * product.getQuantity();
+	}
+	return total;
+}
