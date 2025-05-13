@@ -24,6 +24,12 @@
     <ClInclude Include="AddEditCategoryForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AddEditCustomerForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AddEditSupplierForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InventoryApp.cpp">

@@ -3,8 +3,12 @@
 #include "../РГР/Product.h"
 #include "../РГР/Inventory.h"
 #include "../РГР/Category.h"
+#include "../РГР/Customer.h"
+#include "../РГР/Supplier.h"
 #include "AddEditProductForm.h"
 #include "AddEditCategoryForm.h"
+#include "AddEditCustomerForm.h"
+#include "AddEditSupplierForm.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace InventoryApp {
@@ -28,6 +32,8 @@ namespace InventoryApp {
             inventory->loadFromFile("inventory_data.txt");
             UpdateProductGrid();
             UpdateCategoryGrid();
+            UpdateCustomerGrid();
+            UpdateSupplierGrid();
         }
 
     protected:
@@ -42,8 +48,12 @@ namespace InventoryApp {
     private: System::Windows::Forms::TabControl^ tabControl;
     private: System::Windows::Forms::TabPage^ tabProducts;
     private: System::Windows::Forms::TabPage^ tabCategories;
+    private: System::Windows::Forms::TabPage^ tabCustomers;
+    private: System::Windows::Forms::TabPage^ tabSuppliers;
     private: System::Windows::Forms::DataGridView^ dataGridViewProducts;
     private: System::Windows::Forms::DataGridView^ dataGridViewCategories;
+    private: System::Windows::Forms::DataGridView^ dataGridViewCustomers;
+    private: System::Windows::Forms::DataGridView^ dataGridViewSuppliers;
     private: System::Windows::Forms::TextBox^ txtSearch;
     private: System::Windows::Forms::Button^ btnSearch;
     private: System::Windows::Forms::Button^ btnAddSample;
@@ -53,6 +63,12 @@ namespace InventoryApp {
     private: System::Windows::Forms::Button^ btnAddCategory;
     private: System::Windows::Forms::Button^ btnEditCategory;
     private: System::Windows::Forms::Button^ btnDeleteCategory;
+    private: System::Windows::Forms::Button^ btnAddCustomer;
+    private: System::Windows::Forms::Button^ btnEditCustomer;
+    private: System::Windows::Forms::Button^ btnDeleteCustomer;
+    private: System::Windows::Forms::Button^ btnAddSupplier;
+    private: System::Windows::Forms::Button^ btnEditSupplier;
+    private: System::Windows::Forms::Button^ btnDeleteSupplier;
     private: System::Windows::Forms::Button^ btnSave;
     private: System::Windows::Forms::Button^ btnLoad;
     private: Inventory* inventory;
@@ -64,8 +80,12 @@ namespace InventoryApp {
                this->tabControl = (gcnew System::Windows::Forms::TabControl());
                this->tabProducts = (gcnew System::Windows::Forms::TabPage());
                this->tabCategories = (gcnew System::Windows::Forms::TabPage());
+               this->tabCustomers = (gcnew System::Windows::Forms::TabPage());
+               this->tabSuppliers = (gcnew System::Windows::Forms::TabPage());
                this->dataGridViewProducts = (gcnew System::Windows::Forms::DataGridView());
                this->dataGridViewCategories = (gcnew System::Windows::Forms::DataGridView());
+               this->dataGridViewCustomers = (gcnew System::Windows::Forms::DataGridView());
+               this->dataGridViewSuppliers = (gcnew System::Windows::Forms::DataGridView());
                this->txtSearch = (gcnew System::Windows::Forms::TextBox());
                this->btnSearch = (gcnew System::Windows::Forms::Button());
                this->btnAddSample = (gcnew System::Windows::Forms::Button());
@@ -75,12 +95,22 @@ namespace InventoryApp {
                this->btnAddCategory = (gcnew System::Windows::Forms::Button());
                this->btnEditCategory = (gcnew System::Windows::Forms::Button());
                this->btnDeleteCategory = (gcnew System::Windows::Forms::Button());
+               this->btnAddCustomer = (gcnew System::Windows::Forms::Button());
+               this->btnEditCustomer = (gcnew System::Windows::Forms::Button());
+               this->btnDeleteCustomer = (gcnew System::Windows::Forms::Button());
+               this->btnAddSupplier = (gcnew System::Windows::Forms::Button());
+               this->btnEditSupplier = (gcnew System::Windows::Forms::Button());
+               this->btnDeleteSupplier = (gcnew System::Windows::Forms::Button());
                this->btnSave = (gcnew System::Windows::Forms::Button());
                this->btnLoad = (gcnew System::Windows::Forms::Button());
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->BeginInit();
+               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCustomers))->BeginInit();
+               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewSuppliers))->BeginInit();
                this->tabProducts->SuspendLayout();
                this->tabCategories->SuspendLayout();
+               this->tabCustomers->SuspendLayout();
+               this->tabSuppliers->SuspendLayout();
                this->tabControl->SuspendLayout();
                this->SuspendLayout();
 
@@ -92,6 +122,8 @@ namespace InventoryApp {
                this->tabControl->TabIndex = 0;
                this->tabControl->Controls->Add(this->tabProducts);
                this->tabControl->Controls->Add(this->tabCategories);
+               this->tabControl->Controls->Add(this->tabCustomers);
+               this->tabControl->Controls->Add(this->tabSuppliers);
 
                // tabProducts
                this->tabProducts->Controls->Add(this->btnDeleteProduct);
@@ -117,6 +149,30 @@ namespace InventoryApp {
                this->tabCategories->TabIndex = 1;
                this->tabCategories->Text = L"Категорії";
 
+               // tabCustomers
+               this->tabCustomers->Controls->Add(this->btnDeleteCustomer);
+               this->tabCustomers->Controls->Add(this->btnEditCustomer);
+               this->tabCustomers->Controls->Add(this->btnAddCustomer);
+               this->tabCustomers->Controls->Add(this->dataGridViewCustomers);
+               this->tabCustomers->Location = System::Drawing::Point(4, 22);
+               this->tabCustomers->Name = L"tabCustomers";
+               this->tabCustomers->Padding = System::Windows::Forms::Padding(3);
+               this->tabCustomers->Size = System::Drawing::Size(552, 274);
+               this->tabCustomers->TabIndex = 2;
+               this->tabCustomers->Text = L"Клієнти";
+
+               // tabSuppliers
+               this->tabSuppliers->Controls->Add(this->btnDeleteSupplier);
+               this->tabSuppliers->Controls->Add(this->btnEditSupplier);
+               this->tabSuppliers->Controls->Add(this->btnAddSupplier);
+               this->tabSuppliers->Controls->Add(this->dataGridViewSuppliers);
+               this->tabSuppliers->Location = System::Drawing::Point(4, 22);
+               this->tabSuppliers->Name = L"tabSuppliers";
+               this->tabSuppliers->Padding = System::Windows::Forms::Padding(3);
+               this->tabSuppliers->Size = System::Drawing::Size(552, 274);
+               this->tabSuppliers->TabIndex = 3;
+               this->tabSuppliers->Text = L"Постачальники";
+
                // dataGridViewProducts
                this->dataGridViewProducts->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
                this->dataGridViewProducts->Location = System::Drawing::Point(6, 6);
@@ -134,6 +190,24 @@ namespace InventoryApp {
                this->dataGridViewCategories->TabIndex = 0;
                this->dataGridViewCategories->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
                this->dataGridViewCategories->MultiSelect = false;
+
+               // dataGridViewCustomers
+               this->dataGridViewCustomers->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+               this->dataGridViewCustomers->Location = System::Drawing::Point(6, 6);
+               this->dataGridViewCustomers->Name = L"dataGridViewCustomers";
+               this->dataGridViewCustomers->Size = System::Drawing::Size(540, 200);
+               this->dataGridViewCustomers->TabIndex = 0;
+               this->dataGridViewCustomers->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
+               this->dataGridViewCustomers->MultiSelect = false;
+
+               // dataGridViewSuppliers
+               this->dataGridViewSuppliers->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+               this->dataGridViewSuppliers->Location = System::Drawing::Point(6, 6);
+               this->dataGridViewSuppliers->Name = L"dataGridViewSuppliers";
+               this->dataGridViewSuppliers->Size = System::Drawing::Size(540, 200);
+               this->dataGridViewSuppliers->TabIndex = 0;
+               this->dataGridViewSuppliers->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
+               this->dataGridViewSuppliers->MultiSelect = false;
 
                // btnAddProduct
                this->btnAddProduct->Location = System::Drawing::Point(6, 212);
@@ -188,6 +262,60 @@ namespace InventoryApp {
                this->btnDeleteCategory->Text = L"Видалити";
                this->btnDeleteCategory->UseVisualStyleBackColor = true;
                this->btnDeleteCategory->Click += gcnew System::EventHandler(this, &InventoryApp::btnDeleteCategory_Click);
+
+               // btnAddCustomer
+               this->btnAddCustomer->Location = System::Drawing::Point(6, 212);
+               this->btnAddCustomer->Name = L"btnAddCustomer";
+               this->btnAddCustomer->Size = System::Drawing::Size(100, 23);
+               this->btnAddCustomer->TabIndex = 1;
+               this->btnAddCustomer->Text = L"Додати";
+               this->btnAddCustomer->UseVisualStyleBackColor = true;
+               this->btnAddCustomer->Click += gcnew System::EventHandler(this, &InventoryApp::btnAddCustomer_Click);
+
+               // btnEditCustomer
+               this->btnEditCustomer->Location = System::Drawing::Point(112, 212);
+               this->btnEditCustomer->Name = L"btnEditCustomer";
+               this->btnEditCustomer->Size = System::Drawing::Size(100, 23);
+               this->btnEditCustomer->TabIndex = 2;
+               this->btnEditCustomer->Text = L"Редагувати";
+               this->btnEditCustomer->UseVisualStyleBackColor = true;
+               this->btnEditCustomer->Click += gcnew System::EventHandler(this, &InventoryApp::btnEditCustomer_Click);
+
+               // btnDeleteCustomer
+               this->btnDeleteCustomer->Location = System::Drawing::Point(218, 212);
+               this->btnDeleteCustomer->Name = L"btnDeleteCustomer";
+               this->btnDeleteCustomer->Size = System::Drawing::Size(100, 23);
+               this->btnDeleteCustomer->TabIndex = 3;
+               this->btnDeleteCustomer->Text = L"Видалити";
+               this->btnDeleteCustomer->UseVisualStyleBackColor = true;
+               this->btnDeleteCustomer->Click += gcnew System::EventHandler(this, &InventoryApp::btnDeleteCustomer_Click);
+
+               // btnAddSupplier
+               this->btnAddSupplier->Location = System::Drawing::Point(6, 212);
+               this->btnAddSupplier->Name = L"btnAddSupplier";
+               this->btnAddSupplier->Size = System::Drawing::Size(100, 23);
+               this->btnAddSupplier->TabIndex = 1;
+               this->btnAddSupplier->Text = L"Додати";
+               this->btnAddSupplier->UseVisualStyleBackColor = true;
+               this->btnAddSupplier->Click += gcnew System::EventHandler(this, &InventoryApp::btnAddSupplier_Click);
+
+               // btnEditSupplier
+               this->btnEditSupplier->Location = System::Drawing::Point(112, 212);
+               this->btnEditSupplier->Name = L"btnEditSupplier";
+               this->btnEditSupplier->Size = System::Drawing::Size(100, 23);
+               this->btnEditSupplier->TabIndex = 2;
+               this->btnEditSupplier->Text = L"Редагувати";
+               this->btnEditSupplier->UseVisualStyleBackColor = true;
+               this->btnEditSupplier->Click += gcnew System::EventHandler(this, &InventoryApp::btnEditSupplier_Click);
+
+               // btnDeleteSupplier
+               this->btnDeleteSupplier->Location = System::Drawing::Point(218, 212);
+               this->btnDeleteSupplier->Name = L"btnDeleteSupplier";
+               this->btnDeleteSupplier->Size = System::Drawing::Size(100, 23);
+               this->btnDeleteSupplier->TabIndex = 3;
+               this->btnDeleteSupplier->Text = L"Видалити";
+               this->btnDeleteSupplier->UseVisualStyleBackColor = true;
+               this->btnDeleteSupplier->Click += gcnew System::EventHandler(this, &InventoryApp::btnDeleteSupplier_Click);
 
                // txtSearch
                this->txtSearch->Location = System::Drawing::Point(12, 12);
@@ -245,8 +373,12 @@ namespace InventoryApp {
                this->Text = L"Додаток для інвентаризації";
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->EndInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->EndInit();
+               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCustomers))->EndInit();
+               (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewSuppliers))->EndInit();
                this->tabProducts->ResumeLayout(false);
                this->tabCategories->ResumeLayout(false);
+               this->tabCustomers->ResumeLayout(false);
+               this->tabSuppliers->ResumeLayout(false);
                this->tabControl->ResumeLayout(false);
                this->ResumeLayout(false);
                this->PerformLayout();
@@ -261,8 +393,12 @@ namespace InventoryApp {
             inventory->addProduct(Product(1, std::string("Laptop"), 10, 999.99, 1));
             inventory->addProduct(Product(2, std::string("Mouse"), 50, 19.99, 2));
             inventory->addProduct(Product(3, std::string("Keyboard"), 20, 49.99, 2));
+            inventory->addCustomer(Customer(1, std::string("ТОВ Клієнт"), std::string("+380671234567"), std::string("вул. Шевченка, Київ")));
+            inventory->addSupplier(Supplier(1, std::string("ТОВ Постачальник"), std::string("supplier@example.com"), std::string("вул. Лесі Українки, Львів")));
             UpdateProductGrid();
             UpdateCategoryGrid();
+            UpdateCustomerGrid();
+            UpdateSupplierGrid();
         }
 
         void UpdateProductGrid()
@@ -296,6 +432,40 @@ namespace InventoryApp {
             }
         }
 
+        void UpdateCustomerGrid()
+        {
+            dataGridViewCustomers->Rows->Clear();
+            dataGridViewCustomers->Columns->Clear();
+
+            dataGridViewCustomers->Columns->Add("ID", "ID");
+            dataGridViewCustomers->Columns->Add("Name", "Назва");
+            dataGridViewCustomers->Columns->Add("ContactInfo", "Контактна інформація");
+            dataGridViewCustomers->Columns->Add("Address", "Адреса");
+
+            for (const Customer& customer : inventory->getAllCustomers())
+            {
+                dataGridViewCustomers->Rows->Add(customer.getId(), gcnew String(customer.getName().c_str()),
+                    gcnew String(customer.getContactInfo().c_str()), gcnew String(customer.getAddress().c_str()));
+            }
+        }
+
+        void UpdateSupplierGrid()
+        {
+            dataGridViewSuppliers->Rows->Clear();
+            dataGridViewSuppliers->Columns->Clear();
+
+            dataGridViewSuppliers->Columns->Add("ID", "ID");
+            dataGridViewSuppliers->Columns->Add("Name", "Назва");
+            dataGridViewSuppliers->Columns->Add("ContactInfo", "Контактна інформація");
+            dataGridViewSuppliers->Columns->Add("Address", "Адреса");
+
+            for (const Supplier& supplier : inventory->getAllSuppliers())
+            {
+                dataGridViewSuppliers->Rows->Add(supplier.getId(), gcnew String(supplier.getName().c_str()),
+                    gcnew String(supplier.getContactInfo().c_str()), gcnew String(supplier.getAddress().c_str()));
+            }
+        }
+
     private: System::Void btnSearch_Click(System::Object^ sender, System::EventArgs^ e) {
         String^ keyword = txtSearch->Text->ToLower();
         dataGridViewProducts->Rows->Clear();
@@ -318,7 +488,8 @@ namespace InventoryApp {
         AddEditProductForm^ form = gcnew AddEditProductForm(inventory->getAllProducts().size() + 1, inventory);
         if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
         {
-            Product product(form->ProductId, msclr::interop::marshal_as<std::string>(form->ProductName), form->ProductQuantity, form->ProductPrice, form->ProductCategoryId);
+            Product product(form->ProductId, msclr::interop::marshal_as<std::string>(form->ProductName),
+                form->ProductQuantity, form->ProductPrice, form->ProductCategoryId);
             inventory->addProduct(product);
             UpdateProductGrid();
         }
@@ -331,7 +502,8 @@ namespace InventoryApp {
             Product* product = inventory->findProductById(id);
             if (product)
             {
-                AddEditProductForm^ form = gcnew AddEditProductForm(id, gcnew String(product->getName().c_str()), product->getQuantity(), product->getPrice(), product->getCategoryId(), inventory);
+                AddEditProductForm^ form = gcnew AddEditProductForm(id, gcnew String(product->getName().c_str()),
+                    product->getQuantity(), product->getPrice(), product->getCategoryId(), inventory);
                 if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
                 {
                     product->setName(msclr::interop::marshal_as<std::string>(form->ProductName));
@@ -352,7 +524,8 @@ namespace InventoryApp {
         if (dataGridViewProducts->SelectedRows->Count > 0)
         {
             int id = Convert::ToInt32(dataGridViewProducts->SelectedRows[0]->Cells[0]->Value);
-            if (MessageBox::Show(L"Ви впевнені, що хочете видалити цей продукт?", L"Підтвердження", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+            if (MessageBox::Show(L"Ви впевнені, що хочете видалити цей продукт?", L"Підтвердження",
+                MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
             {
                 inventory->removeProductById(id);
                 UpdateProductGrid();
@@ -410,10 +583,12 @@ namespace InventoryApp {
             }
             if (hasProducts)
             {
-                MessageBox::Show(L"Неможливо видалити категорію, оскільки до неї прив’язані продукти.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                MessageBox::Show(L"Неможливо видалити категорію, оскільки до неї прив’язані продукти.",
+                    L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
                 return;
             }
-            if (MessageBox::Show(L"Ви впевнені, що хочете видалити цю категорію?", L"Підтвердження", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+            if (MessageBox::Show(L"Ви впевнені, що хочете видалити цю категорію?", L"Підтвердження",
+                MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
             {
                 inventory->removeCategoryById(id);
                 UpdateCategoryGrid();
@@ -422,6 +597,112 @@ namespace InventoryApp {
         else
         {
             MessageBox::Show(L"Будь ласка, виберіть категорію для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+    private: System::Void btnAddCustomer_Click(System::Object^ sender, System::EventArgs^ e) {
+        AddEditCustomerForm^ form = gcnew AddEditCustomerForm(inventory->getAllCustomers().size() + 1);
+        if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+        {
+            Customer customer(form->CustomerId, msclr::interop::marshal_as<std::string>(form->CustomerName),
+                msclr::interop::marshal_as<std::string>(form->CustomerContactInfo),
+                msclr::interop::marshal_as<std::string>(form->CustomerAddress));
+            inventory->addCustomer(customer);
+            UpdateCustomerGrid();
+        }
+    }
+
+    private: System::Void btnEditCustomer_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewCustomers->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewCustomers->SelectedRows[0]->Cells[0]->Value);
+            Customer* customer = inventory->findCustomerById(id);
+            if (customer)
+            {
+                AddEditCustomerForm^ form = gcnew AddEditCustomerForm(id, gcnew String(customer->getName().c_str()),
+                    gcnew String(customer->getContactInfo().c_str()), gcnew String(customer->getAddress().c_str()));
+                if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+                {
+                    customer->setName(msclr::interop::marshal_as<std::string>(form->CustomerName));
+                    customer->setContactInfo(msclr::interop::marshal_as<std::string>(form->CustomerContactInfo));
+                    customer->setAddress(msclr::interop::marshal_as<std::string>(form->CustomerAddress));
+                    UpdateCustomerGrid();
+                }
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть клієнта для редагування.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+    private: System::Void btnDeleteCustomer_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewCustomers->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewCustomers->SelectedRows[0]->Cells[0]->Value);
+            if (MessageBox::Show(L"Ви впевнені, що хочете видалити цього клієнта?", L"Підтвердження",
+                MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+            {
+                inventory->removeCustomerById(id);
+                UpdateCustomerGrid();
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть клієнта для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+    private: System::Void btnAddSupplier_Click(System::Object^ sender, System::EventArgs^ e) {
+        AddEditSupplierForm^ form = gcnew AddEditSupplierForm(inventory->getAllSuppliers().size() + 1);
+        if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+        {
+            Supplier supplier(form->SupplierId, msclr::interop::marshal_as<std::string>(form->SupplierName),
+                msclr::interop::marshal_as<std::string>(form->SupplierContactInfo),
+                msclr::interop::marshal_as<std::string>(form->SupplierAddress));
+            inventory->addSupplier(supplier);
+            UpdateSupplierGrid();
+        }
+    }
+
+    private: System::Void btnEditSupplier_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewSuppliers->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewSuppliers->SelectedRows[0]->Cells[0]->Value);
+            Supplier* supplier = inventory->findSupplierById(id);
+            if (supplier)
+            {
+                AddEditSupplierForm^ form = gcnew AddEditSupplierForm(id, gcnew String(supplier->getName().c_str()),
+                    gcnew String(supplier->getContactInfo().c_str()), gcnew String(supplier->getAddress().c_str()));
+                if (form->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+                {
+                    supplier->setName(msclr::interop::marshal_as<std::string>(form->SupplierName));
+                    supplier->setContactInfo(msclr::interop::marshal_as<std::string>(form->SupplierContactInfo));
+                    supplier->setAddress(msclr::interop::marshal_as<std::string>(form->SupplierAddress));
+                    UpdateSupplierGrid();
+                }
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть постачальника для редагування.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+    private: System::Void btnDeleteSupplier_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewSuppliers->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewSuppliers->SelectedRows[0]->Cells[0]->Value);
+            if (MessageBox::Show(L"Ви впевнені, що хочете видалити цього постачальника?", L"Підтвердження",
+                MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+            {
+                inventory->removeSupplierById(id);
+                UpdateSupplierGrid();
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть постачальника для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
         }
     }
 
@@ -434,6 +715,8 @@ namespace InventoryApp {
         inventory->loadFromFile("inventory_data.txt");
         UpdateProductGrid();
         UpdateCategoryGrid();
+        UpdateCustomerGrid();
+        UpdateSupplierGrid();
         MessageBox::Show(L"Дані успішно завантажено.", L"Успіх", MessageBoxButtons::OK, MessageBoxIcon::Information);
     }
     };

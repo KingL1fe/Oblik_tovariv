@@ -123,7 +123,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddEditCategoryForm.h" />
+    <ClInclude Include="AddEditCustomerForm.h" />
     <ClInclude Include="AddEditProductForm.h" />
+    <ClInclude Include="AddEditSupplierForm.h" />
     <ClInclude Include="InventoryApp.h">
       <FileType>CppForm</FileType>
     </ClInclude>

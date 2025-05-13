@@ -1,11 +1,12 @@
 #pragma once
-#include <string>
 
 #ifdef CUSTOMER_EXPORTS
 #define CUSTOMER_API __declspec(dllexport)
 #else
 #define CUSTOMER_API __declspec(dllimport)
 #endif
+
+#include <string>
 
 using namespace std;
 

@@ -63,6 +63,60 @@ vector<Category> Inventory::getAllCategories() const {
     return categories;
 }
 
+void Inventory::addCustomer(const Customer& customer) {
+    customers.push_back(customer);
+}
+
+bool Inventory::removeCustomerById(int id) {
+    for (auto it = customers.begin(); it != customers.end(); ++it) {
+        if (it->getId() == id) {
+            customers.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Customer* Inventory::findCustomerById(int id) {
+    for (auto& customer : customers) {
+        if (customer.getId() == id) {
+            return &customer;
+        }
+    }
+    return nullptr;
+}
+
+vector<Customer> Inventory::getAllCustomers() const {
+    return customers;
+}
+
+void Inventory::addSupplier(const Supplier& supplier) {
+    suppliers.push_back(supplier);
+}
+
+bool Inventory::removeSupplierById(int id) {
+    for (auto it = suppliers.begin(); it != suppliers.end(); ++it) {
+        if (it->getId() == id) {
+            suppliers.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Supplier* Inventory::findSupplierById(int id) {
+    for (auto& supplier : suppliers) {
+        if (supplier.getId() == id) {
+            return &supplier;
+        }
+    }
+    return nullptr;
+}
+
+vector<Supplier> Inventory::getAllSuppliers() const {
+    return suppliers;
+}
+
 void Inventory::saveToFile(const string& filename) const {
     ofstream file(filename);
     if (!file.is_open()) {
@@ -83,6 +137,20 @@ void Inventory::saveToFile(const string& filename) const {
             << product.getCategoryId() << "\n";
     }
 
+    // «береженн€ кл≥Їнт≥в
+    file << "Customers:\n";
+    for (const Customer& customer : customers) {
+        file << customer.getId() << ";" << customer.getName() << ";"
+            << customer.getContactInfo() << ";" << customer.getAddress() << "\n";
+    }
+
+    // «береженн€ постачальник≥в
+    file << "Suppliers:\n";
+    for (const Supplier& supplier : suppliers) {
+        file << supplier.getId() << ";" << supplier.getName() << ";"
+            << supplier.getContactInfo() << ";" << supplier.getAddress() << "\n";
+    }
+
     file.close();
 }
 
@@ -94,19 +162,41 @@ void Inventory::loadFromFile(const string& filename) {
 
     products.clear();
     categories.clear();
+    customers.clear();
+    suppliers.clear();
     string line;
     bool readingCategories = false;
     bool readingProducts = false;
+    bool readingCustomers = false;
+    bool readingSuppliers = false;
 
     while (getline(file, line)) {
         if (line == "Categories:") {
             readingCategories = true;
             readingProducts = false;
+            readingCustomers = false;
+            readingSuppliers = false;
             continue;
         }
         else if (line == "Products:") {
             readingCategories = false;
             readingProducts = true;
+            readingCustomers = false;
+            readingSuppliers = false;
+            continue;
+        }
+        else if (line == "Customers:") {
+            readingCategories = false;
+            readingProducts = false;
+            readingCustomers = true;
+            readingSuppliers = false;
+            continue;
+        }
+        else if (line == "Suppliers:") {
+            readingCategories = false;
+            readingProducts = false;
+            readingCustomers = false;
+            readingSuppliers = true;
             continue;
         }
 
@@ -131,6 +221,26 @@ void Inventory::loadFromFile(const string& filename) {
             double price = stod(priceStr);
             int categoryId = stoi(categoryIdStr);
             products.push_back(Product(id, name, quantity, price, categoryId));
+        }
+        else if (readingCustomers && !line.empty()) {
+            stringstream ss(line);
+            string idStr, name, contactInfo, address;
+            getline(ss, idStr, ';');
+            getline(ss, name, ';');
+            getline(ss, contactInfo, ';');
+            getline(ss, address);
+            int id = stoi(idStr);
+            customers.push_back(Customer(id, name, contactInfo, address));
+        }
+        else if (readingSuppliers && !line.empty()) {
+            stringstream ss(line);
+            string idStr, name, contactInfo, address;
+            getline(ss, idStr, ';');
+            getline(ss, name, ';');
+            getline(ss, contactInfo, ';');
+            getline(ss, address);
+            int id = stoi(idStr);
+            suppliers.push_back(Supplier(id, name, contactInfo, address));
         }
     }
 
