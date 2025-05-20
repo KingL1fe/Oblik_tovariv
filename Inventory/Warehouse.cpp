@@ -1,12 +1,13 @@
-#define WAREHOUSE_EXPORTS
 #include "Warehouse.h"
-Warehouse::Warehouse(int id, const string& name, const string& address)
-    : id(id), name(name), address(address) {
+
+Warehouse::Warehouse() : id(0), location(""), capacity(0) {}
+Warehouse::Warehouse(int id, const string& location, int capacity)
+    : id(id), location(location), capacity(capacity) {
 }
 
 int Warehouse::getId() const { return id; }
-string Warehouse::getName() const { return name; }
-string Warehouse::getAddress() const { return address; }
+string Warehouse::getLocation() const { return location; }
+int Warehouse::getCapacity() const { return capacity; }
 
-void Warehouse::setName(const string& newName) { name = newName; }
-void Warehouse::setAddress(const string& newAddress) { address = newAddress; }
+void Warehouse::setLocation(const string& location) { this->location = location; }
+void Warehouse::setCapacity(int capacity) { this->capacity = capacity; }

@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿
+#pragma once
 
 #include "../РГР/Product.h"
 #include "../РГР/Inventory.h"
@@ -6,11 +7,13 @@
 #include "../РГР/Customer.h"
 #include "../РГР/Supplier.h"
 #include "../РГР/Order.h"
+#include "../РГР/Warehouse.h"
 #include "AddEditProductForm.h"
 #include "AddEditCategoryForm.h"
 #include "AddEditCustomerForm.h"
 #include "AddEditSupplierForm.h"
 #include "AddEditOrderForm.h"
+#include "WarehouseForm.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace InventoryApp {
@@ -82,6 +85,8 @@ namespace InventoryApp {
     private: System::Windows::Forms::Button^ btnLoad;
     private: Inventory* inventory;
     private: System::ComponentModel::Container^ components;
+    private: System::Windows::Forms::Button^ btnWarehouse;
+
 
 #pragma region Windows Form Designer generated code
            void InitializeComponent(void)
@@ -117,6 +122,15 @@ namespace InventoryApp {
                this->btnDeleteOrder = (gcnew System::Windows::Forms::Button());
                this->btnSave = (gcnew System::Windows::Forms::Button());
                this->btnLoad = (gcnew System::Windows::Forms::Button());
+               this->btnWarehouse = gcnew System::Windows::Forms::Button();
+               this->btnWarehouse->Location = System::Drawing::Point(20, 540); // Змінити координати при потребі
+               this->btnWarehouse->Name = L"btnWarehouse";
+               this->btnWarehouse->Size = System::Drawing::Size(150, 30);
+               this->btnWarehouse->TabIndex = 10;
+               this->btnWarehouse->Text = L"Склади";
+               this->btnWarehouse->UseVisualStyleBackColor = true;
+               this->btnWarehouse->Click += gcnew System::EventHandler(this, &InventoryApp::btnWarehouse_Click);
+               this->Controls->Add(this->btnWarehouse);
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCustomers))->BeginInit();
@@ -449,6 +463,7 @@ namespace InventoryApp {
                this->tabControl->ResumeLayout(false);
                this->ResumeLayout(false);
                this->PerformLayout();
+
            }
 #pragma endregion
 
@@ -915,5 +930,10 @@ namespace InventoryApp {
         UpdateOrderGrid();
         MessageBox::Show(L"Дані успішно завантажено.", L"Успіх", MessageBoxButtons::OK, MessageBoxIcon::Information);
     }
+           private: System::Void btnWarehouse_Click(System::Object^ sender, System::EventArgs^ e) {
+               WarehouseForm^ form = gcnew WarehouseForm(inventory);
+               form->ShowDialog();
+           }
+
     };
 }

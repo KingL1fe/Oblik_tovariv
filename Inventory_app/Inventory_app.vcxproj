@@ -82,9 +82,9 @@
       <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>"D:\навчання\ООП\РГР\Oblik_tovariv\x64\Debug\Inventory.lib"</AdditionalDependencies>
+      <AdditionalDependencies>"C:\Users\svitb\OneDrive\Desktop\Навчання\1 курс 2 семестр\ООП\РГР\РГР\Inventory_app\x64\Debug\Inventory.lib"</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>"D:\навчання\ООП\РГР\Oblik_tovariv\x64\Debug"</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>"C:\Users\svitb\OneDrive\Desktop\Навчання\1 курс 2 семестр\ООП\РГР\РГР\Inventory_app\x64\Debug\Inventory.lib"</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -130,6 +130,7 @@
     <ClInclude Include="InventoryApp.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="WarehouseForm.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="InventoryApp.resx">

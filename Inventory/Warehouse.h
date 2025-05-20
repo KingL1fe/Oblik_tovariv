@@ -1,5 +1,4 @@
-#pragma once
-
+#pragma once   
 #ifdef WAREHOUSE_EXPORTS
 #define WAREHOUSE_API __declspec(dllexport)
 #else
@@ -7,22 +6,22 @@
 #endif
 
 #include <string>
-
 using namespace std;
 
 class WAREHOUSE_API Warehouse {
 private:
     int id;
-    string name;
-    string address;
+    string location;
+    int capacity;
 
 public:
-    Warehouse(int id, const string& name, const string& address);
+    Warehouse();
+    Warehouse(int id, const string& location, int capacity);
 
     int getId() const;
-    string getName() const;
-    string getAddress() const;
+    string getLocation() const;
+    int getCapacity() const;
 
-    void setName(const string& newName);
-    void setAddress(const string& newAddress);
+    void setLocation(const string& location);
+    void setCapacity(int capacity);
 };

@@ -3,330 +3,143 @@
 #include <fstream>
 #include <sstream>
 
-Inventory::Inventory() {}
+// ... С–РЅС€С– РјРµС‚РѕРґРё Р±РµР· Р·РјС–РЅ ...
 
-void Inventory::addProduct(const Product& product) {
-    products.push_back(product);
+// вњ… WAREHOUSE methods
+void Inventory::addWarehouse(const Warehouse& warehouse) {
+    warehouses.push_back(warehouse);
 }
 
-bool Inventory::removeProductById(int id) {
-    for (auto it = products.begin(); it != products.end(); ++it) {
+bool Inventory::removeWarehouseById(int id) {
+    for (auto it = warehouses.begin(); it != warehouses.end(); ++it) {
         if (it->getId() == id) {
-            products.erase(it);
+            warehouses.erase(it);
             return true;
         }
     }
     return false;
 }
 
-Product* Inventory::findProductById(int id) {
-    for (auto& product : products) {
-        if (product.getId() == id) {
-            return &product;
+Warehouse* Inventory::findWarehouseById(int id) {
+    for (auto& warehouse : warehouses) {
+        if (warehouse.getId() == id) {
+            return &warehouse;
         }
     }
     return nullptr;
 }
 
-vector<Product> Inventory::getAllProducts() const {
-    return products;
+vector<Warehouse> Inventory::getAllWarehouses() const {
+    return warehouses;
 }
 
-void Inventory::clearInventory() {
-    products.clear();
-}
-
-void Inventory::addCategory(const Category& category) {
-    categories.push_back(category);
-}
-
-bool Inventory::removeCategoryById(int id) {
-    for (auto it = categories.begin(); it != categories.end(); ++it) {
-        if (it->getId() == id) {
-            categories.erase(it);
-            return true;
-        }
-    }
-    return false;
-}
-
-Category* Inventory::findCategoryById(int id) {
-    for (auto& category : categories) {
-        if (category.getId() == id) {
-            return &category;
-        }
-    }
-    return nullptr;
-}
-
-vector<Category> Inventory::getAllCategories() const {
-    return categories;
-}
-
-void Inventory::addCustomer(const Customer& customer) {
-    customers.push_back(customer);
-}
-
-bool Inventory::removeCustomerById(int id) {
-    for (auto it = customers.begin(); it != customers.end(); ++it) {
-        if (it->getId() == id) {
-            customers.erase(it);
-            return true;
-        }
-    }
-    return false;
-}
-
-Customer* Inventory::findCustomerById(int id) {
-    for (auto& customer : customers) {
-        if (customer.getId() == id) {
-            return &customer;
-        }
-    }
-    return nullptr;
-}
-
-vector<Customer> Inventory::getAllCustomers() const {
-    return customers;
-}
-
-void Inventory::addSupplier(const Supplier& supplier) {
-    suppliers.push_back(supplier);
-}
-
-bool Inventory::removeSupplierById(int id) {
-    for (auto it = suppliers.begin(); it != suppliers.end(); ++it) {
-        if (it->getId() == id) {
-            suppliers.erase(it);
-            return true;
-        }
-    }
-    return false;
-}
-
-Supplier* Inventory::findSupplierById(int id) {
-    for (auto& supplier : suppliers) {
-        if (supplier.getId() == id) {
-            return &supplier;
-        }
-    }
-    return nullptr;
-}
-
-vector<Supplier> Inventory::getAllSuppliers() const {
-    return suppliers;
-}
-
-void Inventory::addOrder(const Order& order) {
-    orders.push_back(order);
-}
-
-bool Inventory::removeOrderById(int id) {
-    for (auto it = orders.begin(); it != orders.end(); ++it) {
-        if (it->getId() == id) {
-            orders.erase(it);
-            return true;
-        }
-    }
-    return false;
-}
-
-Order* Inventory::findOrderById(int id) {
-    for (auto& order : orders) {
-        if (order.getId() == id) {
-            return &order;
-        }
-    }
-    return nullptr;
-}
-
-vector<Order> Inventory::getAllOrders() const {
-    return orders;
-}
-
+// вњ… SAVE
 void Inventory::saveToFile(const string& filename) const {
     ofstream file(filename);
-    if (!file.is_open()) {
-        return;
-    }
+    if (!file.is_open()) return;
 
-    // Збереження категорій
     file << "Categories:\n";
-    for (const Category& category : categories) {
-        file << category.getId() << ";" << category.getName() << "\n";
-    }
+    for (const auto& c : categories)
+        file << c.getId() << ";" << c.getName() << "\n";
 
-    // Збереження продуктів
     file << "Products:\n";
-    for (const Product& product : products) {
-        file << product.getId() << ";" << product.getName() << ";"
-            << product.getQuantity() << ";" << product.getPrice() << ";"
-            << product.getCategoryId() << "\n";
-    }
+    for (const auto& p : products)
+        file << p.getId() << ";" << p.getName() << ";" << p.getQuantity() << ";" << p.getPrice() << ";" << p.getCategoryId() << "\n";
 
-    // Збереження клієнтів
     file << "Customers:\n";
-    for (const Customer& customer : customers) {
-        file << customer.getId() << ";" << customer.getName() << ";"
-            << customer.getContactInfo() << ";" << customer.getAddress() << "\n";
-    }
+    for (const auto& c : customers)
+        file << c.getId() << ";" << c.getName() << ";" << c.getContactInfo() << ";" << c.getAddress() << "\n";
 
-    // Збереження постачальників
     file << "Suppliers:\n";
-    for (const Supplier& supplier : suppliers) {
-        file << supplier.getId() << ";" << supplier.getName() << ";"
-            << supplier.getContactInfo() << ";" << supplier.getAddress() << "\n";
-    }
+    for (const auto& s : suppliers)
+        file << s.getId() << ";" << s.getName() << ";" << s.getContactInfo() << ";" << s.getAddress() << "\n";
 
-    // Збереження замовлень
     file << "Orders:\n";
-    for (const Order& order : orders) {
-        file << order.getId() << ";" << order.getCustomerId() << ";"
-            << order.getOrderDate() << ";" << order.getStatus() << ";"
-            << order.getTotalAmount() << ";";
-        auto quantities = order.getProductQuantities();
-        for (size_t i = 0; i < quantities.size(); ++i) {
-            file << quantities[i].first << ":" << quantities[i].second;
-            if (i < quantities.size() - 1) file << ",";
+    for (const auto& o : orders) {
+        file << o.getId() << ";" << o.getCustomerId() << ";" << o.getOrderDate() << ";" << o.getStatus() << ";" << o.getTotalAmount() << ";";
+        auto q = o.getProductQuantities();
+        for (size_t i = 0; i < q.size(); ++i) {
+            file << q[i].first << ":" << q[i].second;
+            if (i < q.size() - 1) file << ",";
         }
         file << "\n";
     }
 
+    file << "Warehouses:\n";
+    for (const auto& w : warehouses) {
+        file << w.getId() << ";" << w.getLocation() << ";" << w.getCapacity() << "\n";
+    }
+
     file.close();
 }
 
+// вњ… LOAD
 void Inventory::loadFromFile(const string& filename) {
     ifstream file(filename);
-    if (!file.is_open()) {
-        return;
-    }
+    if (!file.is_open()) return;
 
-    products.clear();
-    categories.clear();
-    customers.clear();
-    suppliers.clear();
-    orders.clear();
+    clearInventory();
     string line;
-    bool readingCategories = false;
-    bool readingProducts = false;
-    bool readingCustomers = false;
-    bool readingSuppliers = false;
-    bool readingOrders = false;
+    enum Section { NONE, CATEGORIES, PRODUCTS, CUSTOMERS, SUPPLIERS, ORDERS, WAREHOUSES } section = NONE;
 
     while (getline(file, line)) {
-        if (line == "Categories:") {
-            readingCategories = true;
-            readingProducts = false;
-            readingCustomers = false;
-            readingSuppliers = false;
-            readingOrders = false;
-            continue;
-        }
-        else if (line == "Products:") {
-            readingCategories = false;
-            readingProducts = true;
-            readingCustomers = false;
-            readingSuppliers = false;
-            readingOrders = false;
-            continue;
-        }
-        else if (line == "Customers:") {
-            readingCategories = false;
-            readingProducts = false;
-            readingCustomers = true;
-            readingSuppliers = false;
-            readingOrders = false;
-            continue;
-        }
-        else if (line == "Suppliers:") {
-            readingCategories = false;
-            readingProducts = false;
-            readingCustomers = false;
-            readingSuppliers = true;
-            readingOrders = false;
-            continue;
-        }
-        else if (line == "Orders:") {
-            readingCategories = false;
-            readingProducts = false;
-            readingCustomers = false;
-            readingSuppliers = false;
-            readingOrders = true;
-            continue;
-        }
+        if (line == "Categories:") { section = CATEGORIES; continue; }
+        else if (line == "Products:") { section = PRODUCTS; continue; }
+        else if (line == "Customers:") { section = CUSTOMERS; continue; }
+        else if (line == "Suppliers:") { section = SUPPLIERS; continue; }
+        else if (line == "Orders:") { section = ORDERS; continue; }
+        else if (line == "Warehouses:") { section = WAREHOUSES; continue; }
+        if (line.empty()) continue;
 
-        if (readingCategories && !line.empty()) {
-            stringstream ss(line);
+        stringstream ss(line);
+
+        if (section == CATEGORIES) {
             string idStr, name;
-            getline(ss, idStr, ';');
-            getline(ss, name);
-            int id = stoi(idStr);
-            categories.push_back(Category(id, name));
+            getline(ss, idStr, ';'); getline(ss, name);
+            categories.push_back(Category(stoi(idStr), name));
         }
-        else if (readingProducts && !line.empty()) {
-            stringstream ss(line);
-            string idStr, name, quantityStr, priceStr, categoryIdStr;
-            getline(ss, idStr, ';');
-            getline(ss, name, ';');
-            getline(ss, quantityStr, ';');
-            getline(ss, priceStr, ';');
-            getline(ss, categoryIdStr);
-            int id = stoi(idStr);
-            int quantity = stoi(quantityStr);
-            double price = stod(priceStr);
-            int categoryId = stoi(categoryIdStr);
-            products.push_back(Product(id, name, quantity, price, categoryId));
+        else if (section == PRODUCTS) {
+            string idStr, name, qtyStr, priceStr, catIdStr;
+            getline(ss, idStr, ';'); getline(ss, name, ';'); getline(ss, qtyStr, ';');
+            getline(ss, priceStr, ';'); getline(ss, catIdStr);
+            products.push_back(Product(stoi(idStr), name, stoi(qtyStr), stod(priceStr), stoi(catIdStr)));
         }
-        else if (readingCustomers && !line.empty()) {
-            stringstream ss(line);
-            string idStr, name, contactInfo, address;
-            getline(ss, idStr, ';');
-            getline(ss, name, ';');
-            getline(ss, contactInfo, ';');
-            getline(ss, address);
-            int id = stoi(idStr);
-            customers.push_back(Customer(id, name, contactInfo, address));
+        else if (section == CUSTOMERS) {
+            string idStr, name, contact, address;
+            getline(ss, idStr, ';'); getline(ss, name, ';'); getline(ss, contact, ';'); getline(ss, address);
+            customers.push_back(Customer(stoi(idStr), name, contact, address));
         }
-        else if (readingSuppliers && !line.empty()) {
-            stringstream ss(line);
-            string idStr, name, contactInfo, address;
-            getline(ss, idStr, ';');
-            getline(ss, name, ';');
-            getline(ss, contactInfo, ';');
-            getline(ss, address);
-            int id = stoi(idStr);
-            suppliers.push_back(Supplier(id, name, contactInfo, address));
+        else if (section == SUPPLIERS) {
+            string idStr, name, contact, address;
+            getline(ss, idStr, ';'); getline(ss, name, ';'); getline(ss, contact, ';'); getline(ss, address);
+            suppliers.push_back(Supplier(stoi(idStr), name, contact, address));
         }
-        else if (readingOrders && !line.empty()) {
-            stringstream ss(line);
-            string idStr, customerIdStr, orderDate, status, totalAmountStr, quantitiesStr;
-            getline(ss, idStr, ';');
-            getline(ss, customerIdStr, ';');
-            getline(ss, orderDate, ';');
-            getline(ss, status, ';');
-            getline(ss, totalAmountStr, ';');
-            getline(ss, quantitiesStr);
+        else if (section == ORDERS) {
+            string idStr, custIdStr, date, status, totalStr, prodStr;
+            getline(ss, idStr, ';'); getline(ss, custIdStr, ';'); getline(ss, date, ';');
+            getline(ss, status, ';'); getline(ss, totalStr, ';'); getline(ss, prodStr);
 
-            int id = stoi(idStr);
-            int customerId = stoi(customerIdStr);
-            double totalAmount = stod(totalAmountStr);
-
-            vector<pair<int, int>> productQuantities;
-            stringstream quantitiesSS(quantitiesStr);
-            string quantityPair;
-            while (getline(quantitiesSS, quantityPair, ',')) {
-                stringstream pairSS(quantityPair);
-                string productIdStr, quantityStr;
-                getline(pairSS, productIdStr, ':');
-                getline(pairSS, quantityStr);
-                int productId = stoi(productIdStr);
-                int quantity = stoi(quantityStr);
-                productQuantities.push_back({ productId, quantity });
+            vector<pair<int, int>> pq;
+            stringstream prodSS(prodStr);
+            string pairStr;
+            while (getline(prodSS, pairStr, ',')) {
+                size_t pos = pairStr.find(':');
+                if (pos != string::npos) {
+                    int pid = stoi(pairStr.substr(0, pos));
+                    int qty = stoi(pairStr.substr(pos + 1));
+                    pq.emplace_back(pid, qty);
+                }
             }
 
-            orders.push_back(Order(id, customerId, orderDate, status, productQuantities, totalAmount));
+            orders.push_back(Order(stoi(idStr), stoi(custIdStr), date, status, pq, stod(totalStr)));
+        }
+        else if (section == WAREHOUSES) {
+            string idStr, location, capStr;
+            getline(ss, idStr, ';'); getline(ss, location, ';'); getline(ss, capStr);
+            warehouses.push_back(Warehouse(stoi(idStr), location, stoi(capStr)));
         }
     }
 
     file.close();
 }
+
