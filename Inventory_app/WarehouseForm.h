@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../РГР/Inventory.h"
-#include "../РГР/Warehouse.h"
+#include "../RGR/Inventory.h"
+#include "../RGR/Warehouse.h"
 
 #include <msclr/marshal_cppstd.h>
 

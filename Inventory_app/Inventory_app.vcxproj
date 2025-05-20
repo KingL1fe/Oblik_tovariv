@@ -82,7 +82,7 @@
       <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>"C:\Users\svitb\OneDrive\Desktop\Навчання\1 курс 2 семестр\ООП\РГР\РГР\Inventory_app\x64\Debug\Inventory.lib"</AdditionalDependencies>
+      <AdditionalDependencies>"D:\навчання\ООП\РГР\Oblik_tovariv\x64\Debug\Inventory.lib"</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>"C:\Users\svitb\OneDrive\Desktop\Навчання\1 курс 2 семестр\ООП\РГР\РГР\Inventory_app\x64\Debug\Inventory.lib"</AdditionalLibraryDirectories>
     </Link>

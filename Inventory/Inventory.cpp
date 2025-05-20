@@ -3,9 +3,147 @@
 #include <fstream>
 #include <sstream>
 
-// ... інші методи без змін ...
+Inventory::Inventory() {}
 
-// ✅ WAREHOUSE methods
+void Inventory::addProduct(const Product& product) {
+    products.push_back(product);
+}
+
+bool Inventory::removeProductById(int id) {
+    for (auto it = products.begin(); it != products.end(); ++it) {
+        if (it->getId() == id) {
+            products.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Product* Inventory::findProductById(int id) {
+    for (auto& product : products) {
+        if (product.getId() == id) {
+            return &product;
+        }
+    }
+    return nullptr;
+}
+
+vector<Product> Inventory::getAllProducts() const {
+    return products;
+}
+
+void Inventory::clearInventory() {
+    products.clear();
+}
+
+void Inventory::addCategory(const Category& category) {
+    categories.push_back(category);
+}
+
+bool Inventory::removeCategoryById(int id) {
+    for (auto it = categories.begin(); it != categories.end(); ++it) {
+        if (it->getId() == id) {
+            categories.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Category* Inventory::findCategoryById(int id) {
+    for (auto& category : categories) {
+        if (category.getId() == id) {
+            return &category;
+        }
+    }
+    return nullptr;
+}
+
+vector<Category> Inventory::getAllCategories() const {
+    return categories;
+}
+
+void Inventory::addCustomer(const Customer& customer) {
+    customers.push_back(customer);
+}
+
+bool Inventory::removeCustomerById(int id) {
+    for (auto it = customers.begin(); it != customers.end(); ++it) {
+        if (it->getId() == id) {
+            customers.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Customer* Inventory::findCustomerById(int id) {
+    for (auto& customer : customers) {
+        if (customer.getId() == id) {
+            return &customer;
+        }
+    }
+    return nullptr;
+}
+
+vector<Customer> Inventory::getAllCustomers() const {
+    return customers;
+}
+
+void Inventory::addSupplier(const Supplier& supplier) {
+    suppliers.push_back(supplier);
+}
+
+bool Inventory::removeSupplierById(int id) {
+    for (auto it = suppliers.begin(); it != suppliers.end(); ++it) {
+        if (it->getId() == id) {
+            suppliers.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Supplier* Inventory::findSupplierById(int id) {
+    for (auto& supplier : suppliers) {
+        if (supplier.getId() == id) {
+            return &supplier;
+        }
+    }
+    return nullptr;
+}
+
+vector<Supplier> Inventory::getAllSuppliers() const {
+    return suppliers;
+}
+
+void Inventory::addOrder(const Order& order) {
+    orders.push_back(order);
+}
+
+bool Inventory::removeOrderById(int id) {
+    for (auto it = orders.begin(); it != orders.end(); ++it) {
+        if (it->getId() == id) {
+            orders.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Order* Inventory::findOrderById(int id) {
+    for (auto& order : orders) {
+        if (order.getId() == id) {
+            return &order;
+        }
+    }
+    return nullptr;
+}
+
+vector<Order> Inventory::getAllOrders() const {
+    return orders;
+}
+
 void Inventory::addWarehouse(const Warehouse& warehouse) {
     warehouses.push_back(warehouse);
 }
@@ -76,70 +214,139 @@ void Inventory::saveToFile(const string& filename) const {
 // ✅ LOAD
 void Inventory::loadFromFile(const string& filename) {
     ifstream file(filename);
-    if (!file.is_open()) return;
+    if (!file.is_open()) {
+        return;
+    }
 
-    clearInventory();
+    products.clear();
+    categories.clear();
+    customers.clear();
+    suppliers.clear();
+    orders.clear();
+    warehouses.clear();
+
     string line;
-    enum Section { NONE, CATEGORIES, PRODUCTS, CUSTOMERS, SUPPLIERS, ORDERS, WAREHOUSES } section = NONE;
+    bool readingCategories = false;
+    bool readingProducts = false;
+    bool readingCustomers = false;
+    bool readingSuppliers = false;
+    bool readingOrders = false;
+    bool readingWarehouses = false;
 
     while (getline(file, line)) {
-        if (line == "Categories:") { section = CATEGORIES; continue; }
-        else if (line == "Products:") { section = PRODUCTS; continue; }
-        else if (line == "Customers:") { section = CUSTOMERS; continue; }
-        else if (line == "Suppliers:") { section = SUPPLIERS; continue; }
-        else if (line == "Orders:") { section = ORDERS; continue; }
-        else if (line == "Warehouses:") { section = WAREHOUSES; continue; }
+        if (line == "Categories:") {
+            readingCategories = true;
+            readingProducts = readingCustomers = readingSuppliers = readingOrders = readingWarehouses = false;
+            continue;
+        }
+        else if (line == "Products:") {
+            readingProducts = true;
+            readingCategories = readingCustomers = readingSuppliers = readingOrders = readingWarehouses = false;
+            continue;
+        }
+        else if (line == "Customers:") {
+            readingCustomers = true;
+            readingCategories = readingProducts = readingSuppliers = readingOrders = readingWarehouses = false;
+            continue;
+        }
+        else if (line == "Suppliers:") {
+            readingSuppliers = true;
+            readingCategories = readingProducts = readingCustomers = readingOrders = readingWarehouses = false;
+            continue;
+        }
+        else if (line == "Orders:") {
+            readingOrders = true;
+            readingCategories = readingProducts = readingCustomers = readingSuppliers = readingWarehouses = false;
+            continue;
+        }
+        else if (line == "Warehouses:") {
+            readingWarehouses = true;
+            readingCategories = readingProducts = readingCustomers = readingSuppliers = readingOrders = false;
+            continue;
+        }
+
         if (line.empty()) continue;
 
         stringstream ss(line);
 
-        if (section == CATEGORIES) {
+        if (readingCategories) {
             string idStr, name;
-            getline(ss, idStr, ';'); getline(ss, name);
-            categories.push_back(Category(stoi(idStr), name));
+            getline(ss, idStr, ';');
+            getline(ss, name);
+            int id = stoi(idStr);
+            categories.push_back(Category(id, name));
         }
-        else if (section == PRODUCTS) {
-            string idStr, name, qtyStr, priceStr, catIdStr;
-            getline(ss, idStr, ';'); getline(ss, name, ';'); getline(ss, qtyStr, ';');
-            getline(ss, priceStr, ';'); getline(ss, catIdStr);
-            products.push_back(Product(stoi(idStr), name, stoi(qtyStr), stod(priceStr), stoi(catIdStr)));
+        else if (readingProducts) {
+            string idStr, name, quantityStr, priceStr, categoryIdStr;
+            getline(ss, idStr, ';');
+            getline(ss, name, ';');
+            getline(ss, quantityStr, ';');
+            getline(ss, priceStr, ';');
+            getline(ss, categoryIdStr);
+            int id = stoi(idStr);
+            int quantity = stoi(quantityStr);
+            double price = stod(priceStr);
+            int categoryId = stoi(categoryIdStr);
+            products.push_back(Product(id, name, quantity, price, categoryId));
         }
-        else if (section == CUSTOMERS) {
-            string idStr, name, contact, address;
-            getline(ss, idStr, ';'); getline(ss, name, ';'); getline(ss, contact, ';'); getline(ss, address);
-            customers.push_back(Customer(stoi(idStr), name, contact, address));
+        else if (readingCustomers) {
+            string idStr, name, contactInfo, address;
+            getline(ss, idStr, ';');
+            getline(ss, name, ';');
+            getline(ss, contactInfo, ';');
+            getline(ss, address);
+            int id = stoi(idStr);
+            customers.push_back(Customer(id, name, contactInfo, address));
         }
-        else if (section == SUPPLIERS) {
-            string idStr, name, contact, address;
-            getline(ss, idStr, ';'); getline(ss, name, ';'); getline(ss, contact, ';'); getline(ss, address);
-            suppliers.push_back(Supplier(stoi(idStr), name, contact, address));
+        else if (readingSuppliers) {
+            string idStr, name, contactInfo, address;
+            getline(ss, idStr, ';');
+            getline(ss, name, ';');
+            getline(ss, contactInfo, ';');
+            getline(ss, address);
+            int id = stoi(idStr);
+            suppliers.push_back(Supplier(id, name, contactInfo, address));
         }
-        else if (section == ORDERS) {
-            string idStr, custIdStr, date, status, totalStr, prodStr;
-            getline(ss, idStr, ';'); getline(ss, custIdStr, ';'); getline(ss, date, ';');
-            getline(ss, status, ';'); getline(ss, totalStr, ';'); getline(ss, prodStr);
+        else if (readingOrders) {
+            string idStr, customerIdStr, orderDate, status, totalAmountStr, quantitiesStr;
+            getline(ss, idStr, ';');
+            getline(ss, customerIdStr, ';');
+            getline(ss, orderDate, ';');
+            getline(ss, status, ';');
+            getline(ss, totalAmountStr, ';');
+            getline(ss, quantitiesStr);
 
-            vector<pair<int, int>> pq;
-            stringstream prodSS(prodStr);
-            string pairStr;
-            while (getline(prodSS, pairStr, ',')) {
-                size_t pos = pairStr.find(':');
-                if (pos != string::npos) {
-                    int pid = stoi(pairStr.substr(0, pos));
-                    int qty = stoi(pairStr.substr(pos + 1));
-                    pq.emplace_back(pid, qty);
-                }
+            int id = stoi(idStr);
+            int customerId = stoi(customerIdStr);
+            double totalAmount = stod(totalAmountStr);
+
+            vector<pair<int, int>> productQuantities;
+            stringstream quantitiesSS(quantitiesStr);
+            string quantityPair;
+            while (getline(quantitiesSS, quantityPair, ',')) {
+                stringstream pairSS(quantityPair);
+                string productIdStr, quantityStr;
+                getline(pairSS, productIdStr, ':');
+                getline(pairSS, quantityStr);
+                int productId = stoi(productIdStr);
+                int quantity = stoi(quantityStr);
+                productQuantities.push_back({ productId, quantity });
             }
 
-            orders.push_back(Order(stoi(idStr), stoi(custIdStr), date, status, pq, stod(totalStr)));
+            orders.push_back(Order(id, customerId, orderDate, status, productQuantities, totalAmount));
         }
-        else if (section == WAREHOUSES) {
-            string idStr, location, capStr;
-            getline(ss, idStr, ';'); getline(ss, location, ';'); getline(ss, capStr);
-            warehouses.push_back(Warehouse(stoi(idStr), location, stoi(capStr)));
+        else if (readingWarehouses) {
+            string idStr, location, capacityStr;
+            getline(ss, idStr, ';');
+            getline(ss, location, ';');
+            getline(ss, capacityStr);
+            int id = stoi(idStr);
+            int capacity = stoi(capacityStr);
+            warehouses.push_back(Warehouse(id, location, capacity));
         }
     }
 
     file.close();
 }
+
 

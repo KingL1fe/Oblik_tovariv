@@ -1,13 +1,13 @@
 ﻿
 #pragma once
 
-#include "../РГР/Product.h"
-#include "../РГР/Inventory.h"
-#include "../РГР/Category.h"
-#include "../РГР/Customer.h"
-#include "../РГР/Supplier.h"
-#include "../РГР/Order.h"
-#include "../РГР/Warehouse.h"
+#include "../RGR/Product.h"
+#include "../RGR/Inventory.h"
+#include "../RGR/Category.h"
+#include "../RGR/Customer.h"
+#include "../RGR/Supplier.h"
+#include "../RGR/Order.h"
+#include "../RGR/Warehouse.h"
 #include "AddEditProductForm.h"
 #include "AddEditCategoryForm.h"
 #include "AddEditCustomerForm.h"

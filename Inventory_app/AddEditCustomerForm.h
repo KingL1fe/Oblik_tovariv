@@ -1,4 +1,4 @@
-#include "../РГР/Customer.h"
+#include "../RGR/Customer.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace InventoryApp {

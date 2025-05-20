@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../РГР/Supplier.h"
+#include "../RGR/Supplier.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace InventoryApp {
