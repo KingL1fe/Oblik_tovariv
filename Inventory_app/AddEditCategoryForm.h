@@ -16,7 +16,7 @@ namespace InventoryApp {
         {
             InitializeComponent();
             this->CategoryId = id;
-            this->Text = L"Додати категорію";
+            //this->Text = L"Р”РѕРґР°С‚Рё РєР°С‚РµРіРѕСЂС–СЋ";
         }
 
         AddEditCategoryForm(int id, String^ name)
@@ -24,7 +24,7 @@ namespace InventoryApp {
             InitializeComponent();
             this->CategoryId = id;
             this->txtName->Text = name;
-            this->Text = L"Редагувати категорію";
+            this->Text = L"Р РµРґР°РіСѓРІР°С‚Рё РєР°С‚РµРіРѕСЂС–СЋ";
         }
 
         property int CategoryId;
@@ -53,7 +53,7 @@ namespace InventoryApp {
             this->lblName->Name = L"lblName";
             this->lblName->Size = System::Drawing::Size(35, 13);
             this->lblName->TabIndex = 0;
-            this->lblName->Text = L"Назва:";
+            this->lblName->Text = L"РќР°Р·РІР°:";
 
             // txtName
             this->txtName->Location = System::Drawing::Point(80, 12);
@@ -66,7 +66,7 @@ namespace InventoryApp {
             this->btnSave->Name = L"btnSave";
             this->btnSave->Size = System::Drawing::Size(75, 23);
             this->btnSave->TabIndex = 2;
-            this->btnSave->Text = L"Зберегти";
+            this->btnSave->Text = L"Р—Р±РµСЂРµРіС‚Рё";
             this->btnSave->UseVisualStyleBackColor = true;
             this->btnSave->Click += gcnew System::EventHandler(this, &AddEditCategoryForm::btnSave_Click);
 
@@ -75,7 +75,7 @@ namespace InventoryApp {
             this->btnCancel->Name = L"btnCancel";
             this->btnCancel->Size = System::Drawing::Size(75, 23);
             this->btnCancel->TabIndex = 3;
-            this->btnCancel->Text = L"Скасувати";
+            this->btnCancel->Text = L"РЎРєР°СЃСѓРІР°С‚Рё";
             this->btnCancel->UseVisualStyleBackColor = true;
             this->btnCancel->Click += gcnew System::EventHandler(this, &AddEditCategoryForm::btnCancel_Click);
 
@@ -100,7 +100,7 @@ namespace InventoryApp {
     private: System::Void btnSave_Click(System::Object^ sender, System::EventArgs^ e) {
         if (String::IsNullOrWhiteSpace(txtName->Text))
         {
-            MessageBox::Show(L"Назва категорії не може бути порожньою.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            MessageBox::Show(L"РќР°Р·РІР° РєР°С‚РµРіРѕСЂС–С— РЅРµ РјРѕР¶Рµ Р±СѓС‚Рё РїРѕСЂРѕР¶РЅСЊРѕСЋ.", L"РџРѕРјРёР»РєР°", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 

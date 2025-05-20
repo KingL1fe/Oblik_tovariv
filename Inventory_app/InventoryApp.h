@@ -1,17 +1,19 @@
 ﻿#pragma once
 
-#include "../РГР/Product.h"
-#include "../РГР/Inventory.h"
-#include "../РГР/Category.h"
-#include "../РГР/Customer.h"
-#include "../РГР/Supplier.h"
-#include "../РГР/Order.h"
-#include "../РГР/Invoice.h"
+#include "../RGR/Product.h"
+#include "../RGR/Inventory.h"
+#include "../RGR/Category.h"
+#include "../RGR/Customer.h"
+#include "../RGR/Supplier.h"
+#include "../RGR/Order.h"
+#include "../RGR/Warehouse.h"
+#include "../RGR/Invoice.h"
 #include "AddEditProductForm.h"
 #include "AddEditCategoryForm.h"
 #include "AddEditCustomerForm.h"
 #include "AddEditSupplierForm.h"
 #include "AddEditOrderForm.h"
+#include "WarehouseForm.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace InventoryApp {
@@ -88,6 +90,8 @@ namespace InventoryApp {
     private: System::Windows::Forms::Button^ btnViewInvoice;
     private: Inventory* inventory;
     private: System::ComponentModel::Container^ components;
+    private: System::Windows::Forms::Button^ btnWarehouse;
+
 
 #pragma region Windows Form Designer generated code
            void InitializeComponent(void)
@@ -123,6 +127,15 @@ namespace InventoryApp {
                this->btnDeleteOrder = (gcnew System::Windows::Forms::Button());
                this->btnSave = (gcnew System::Windows::Forms::Button());
                this->btnLoad = (gcnew System::Windows::Forms::Button());
+               this->btnWarehouse = gcnew System::Windows::Forms::Button();
+               this->btnWarehouse->Location = System::Drawing::Point(20, 540); // Змінити координати при потребі
+               this->btnWarehouse->Name = L"btnWarehouse";
+               this->btnWarehouse->Size = System::Drawing::Size(150, 30);
+               this->btnWarehouse->TabIndex = 10;
+               this->btnWarehouse->Text = L"Склади";
+               this->btnWarehouse->UseVisualStyleBackColor = true;
+               this->btnWarehouse->Click += gcnew System::EventHandler(this, &InventoryApp::btnWarehouse_Click);
+               this->Controls->Add(this->btnWarehouse);
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCategories))->BeginInit();
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewCustomers))->BeginInit();
@@ -140,6 +153,7 @@ namespace InventoryApp {
                this->dataGridViewInvoices = (gcnew System::Windows::Forms::DataGridView());
                this->btnViewInvoice = (gcnew System::Windows::Forms::Button());
                this->tabControl->Controls->Add(this->tabInvoices);
+
 
                // tabControl
                this->tabControl->Location = System::Drawing::Point(12, 41);
@@ -489,6 +503,7 @@ namespace InventoryApp {
                this->tabControl->ResumeLayout(false);
                this->ResumeLayout(false);
                this->PerformLayout();
+
            }
 #pragma endregion
 
@@ -987,6 +1002,26 @@ namespace InventoryApp {
                    e->Graphics->DrawString(invoiceRichTextBox->Text, invoiceRichTextBox->Font, Brushes::Black, 50, 50);
                }
 
+           private:
+               RichTextBox^ invoiceRichTextBox; // Поле для зберігання RichTextBox
+
+               // Метод для обробки події Click кнопки Print
+               void OnPrintButtonClick(Object^ sender, EventArgs^ e) {
+                   PrintDocument^ pd = gcnew PrintDocument();
+                   pd->PrintPage += gcnew PrintPageEventHandler(this, &InventoryApp::OnPrintPage);
+                   PrintDialog^ printDialog = gcnew PrintDialog();
+                   printDialog->Document = pd;
+                   if (printDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+                   {
+                       pd->Print();
+                   }
+               }
+
+               // Метод для обробки події PrintPage
+               void OnPrintPage(Object^ sender, PrintPageEventArgs^ e) {
+                   e->Graphics->DrawString(invoiceRichTextBox->Text, invoiceRichTextBox->Font, Brushes::Black, 50, 50);
+               }
+
     private: System::Void btnViewInvoice_Click(System::Object^ sender, System::EventArgs^ e) {
         if (dataGridViewInvoices->SelectedRows->Count > 0)
         {
@@ -1071,7 +1106,6 @@ namespace InventoryApp {
         }
     }
 
-
     private: System::Void btnSave_Click(System::Object^ sender, System::EventArgs^ e) {
         inventory->saveToFile("inventory_data.txt");
         MessageBox::Show(L"Дані успішно збережено.", L"Успіх", MessageBoxButtons::OK, MessageBoxIcon::Information);
@@ -1086,5 +1120,10 @@ namespace InventoryApp {
         UpdateOrderGrid();
         MessageBox::Show(L"Дані успішно завантажено.", L"Успіх", MessageBoxButtons::OK, MessageBoxIcon::Information);
     }
+           private: System::Void btnWarehouse_Click(System::Object^ sender, System::EventArgs^ e) {
+               WarehouseForm^ form = gcnew WarehouseForm(inventory);
+               form->ShowDialog();
+           }
+
     };
 }

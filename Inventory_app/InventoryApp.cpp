@@ -6,6 +6,7 @@ using namespace System::Windows::Forms;
 [STAThread]
 int __clrcall main(cli::array<String^>^ args)
 {
+    SetConsoleOutputCP(1251);
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
 
