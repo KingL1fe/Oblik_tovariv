@@ -20,7 +20,7 @@ namespace InventoryApp {
             inventory = inv;
             InitializeComponent();
             this->ProductId = id;
-            this->Text = L"Ð”Ð¾Ð´Ð°Ñ‚Ð¸ Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ‚";
+            this->Text = L"Äîäàòè ïðîäóêò";
             LoadCategories();
         }
 
@@ -32,7 +32,7 @@ namespace InventoryApp {
             this->txtName->Text = name;
             this->txtQuantity->Text = quantity.ToString();
             this->txtPrice->Text = price.ToString();
-            this->Text = L"Ð ÐµÐ´Ð°Ð³ÑƒÐ²Ð°Ñ‚Ð¸ Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ‚";
+            this->Text = L"Ðåäàãóâàòè ïðîäóêò";
             LoadCategories();
             this->cmbCategory->SelectedValue = categoryId;
         }
@@ -70,10 +70,10 @@ namespace InventoryApp {
             dt->Columns->Add("Id", int::typeid);
             dt->Columns->Add("Name", String::typeid);
 
-            // Ð”Ð¾Ð´Ð°Ñ”Ð¼Ð¾ Ð¾Ð¿Ñ†Ñ–ÑŽ "Ð‘ÐµÐ· ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ñ–Ñ—"
+            // Äîäàºìî îïö³þ "Áåç êàòåãîð³¿"
             DataRow^ defaultRow = dt->NewRow();
-            defaultRow["Id"] = nullptr;
-            defaultRow["Name"] = L"Ð‘ÐµÐ· ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ñ–Ñ—";
+            defaultRow["Id"] = 0;
+            defaultRow["Name"] = L"Áåç êàòåãîð³¿";
             dt->Rows->Add(defaultRow);
 
             for (const Category& category : inventory->getAllCategories())
@@ -110,7 +110,7 @@ namespace InventoryApp {
             this->lblName->Name = L"lblName";
             this->lblName->Size = System::Drawing::Size(35, 13);
             this->lblName->TabIndex = 0;
-            this->lblName->Text = L"ÐÐ°Ð·Ð²Ð°:";
+            this->lblName->Text = L"Íàçâà:";
 
             // lblQuantity
             this->lblQuantity->AutoSize = true;
@@ -118,7 +118,7 @@ namespace InventoryApp {
             this->lblQuantity->Name = L"lblQuantity";
             this->lblQuantity->Size = System::Drawing::Size(55, 13);
             this->lblQuantity->TabIndex = 1;
-            this->lblQuantity->Text = L"ÐšÑ–Ð»ÑŒÐºÑ–ÑÑ‚ÑŒ:";
+            this->lblQuantity->Text = L"Ê³ëüê³ñòü:";
 
             // lblPrice
             this->lblPrice->AutoSize = true;
@@ -126,7 +126,7 @@ namespace InventoryApp {
             this->lblPrice->Name = L"lblPrice";
             this->lblPrice->Size = System::Drawing::Size(35, 13);
             this->lblPrice->TabIndex = 2;
-            this->lblPrice->Text = L"Ð¦Ñ–Ð½Ð°:";
+            this->lblPrice->Text = L"Ö³íà:";
 
             // lblCategory
             this->lblCategory->AutoSize = true;
@@ -134,7 +134,7 @@ namespace InventoryApp {
             this->lblCategory->Name = L"lblCategory";
             this->lblCategory->Size = System::Drawing::Size(55, 13);
             this->lblCategory->TabIndex = 3;
-            this->lblCategory->Text = L"ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ñ–Ñ:";
+            this->lblCategory->Text = L"Êàòåãîð³ÿ:";
 
             // txtName
             this->txtName->Location = System::Drawing::Point(80, 12);
@@ -166,7 +166,7 @@ namespace InventoryApp {
             this->btnSave->Name = L"btnSave";
             this->btnSave->Size = System::Drawing::Size(75, 23);
             this->btnSave->TabIndex = 8;
-            this->btnSave->Text = L"Ð—Ð±ÐµÑ€ÐµÐ³Ñ‚Ð¸";
+            this->btnSave->Text = L"Çáåðåãòè";
             this->btnSave->UseVisualStyleBackColor = true;
             this->btnSave->Click += gcnew System::EventHandler(this, &AddEditProductForm::btnSave_Click);
 
@@ -175,7 +175,7 @@ namespace InventoryApp {
             this->btnCancel->Name = L"btnCancel";
             this->btnCancel->Size = System::Drawing::Size(75, 23);
             this->btnCancel->TabIndex = 9;
-            this->btnCancel->Text = L"Ð¡ÐºÐ°ÑÑƒÐ²Ð°Ñ‚Ð¸";
+            this->btnCancel->Text = L"Ñêàñóâàòè";
             this->btnCancel->UseVisualStyleBackColor = true;
             this->btnCancel->Click += gcnew System::EventHandler(this, &AddEditProductForm::btnCancel_Click);
 
@@ -206,7 +206,7 @@ namespace InventoryApp {
     private: System::Void btnSave_Click(System::Object^ sender, System::EventArgs^ e) {
         if (String::IsNullOrWhiteSpace(txtName->Text))
         {
-            MessageBox::Show(L"ÐÐ°Ð·Ð²Ð° Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ‚Ñƒ Ð½Ðµ Ð¼Ð¾Ð¶Ðµ Ð±ÑƒÑ‚Ð¸ Ð¿Ð¾Ñ€Ð¾Ð¶Ð½ÑŒÐ¾ÑŽ.", L"ÐŸÐ¾Ð¼Ð¸Ð»ÐºÐ°", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            MessageBox::Show(L"Íàçâà ïðîäóêòó íå ìîæå áóòè ïîðîæíüîþ.", L"Ïîìèëêà", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 
@@ -217,13 +217,13 @@ namespace InventoryApp {
             quantity = Convert::ToInt32(txtQuantity->Text);
             if (quantity < 0)
             {
-                MessageBox::Show(L"ÐšÑ–Ð»ÑŒÐºÑ–ÑÑ‚ÑŒ Ð½Ðµ Ð¼Ð¾Ð¶Ðµ Ð±ÑƒÑ‚Ð¸ Ð²Ñ–Ð´â€™Ñ”Ð¼Ð½Ð¾ÑŽ.", L"ÐŸÐ¾Ð¼Ð¸Ð»ÐºÐ°", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                MessageBox::Show(L"Ê³ëüê³ñòü íå ìîæå áóòè â³ä’ºìíîþ.", L"Ïîìèëêà", MessageBoxButtons::OK, MessageBoxIcon::Error);
                 return;
             }
         }
         catch (FormatException^)
         {
-            MessageBox::Show(L"Ð’Ð²ÐµÐ´Ñ–Ñ‚ÑŒ ÐºÐ¾Ñ€ÐµÐºÑ‚Ð½Ðµ Ñ‡Ð¸ÑÐ»Ð¾ Ð´Ð»Ñ ÐºÑ–Ð»ÑŒÐºÐ¾ÑÑ‚Ñ–.", L"ÐŸÐ¾Ð¼Ð¸Ð»ÐºÐ°", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            MessageBox::Show(L"Ââåä³òü êîðåêòíå ÷èñëî äëÿ ê³ëüêîñò³.", L"Ïîìèëêà", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 
@@ -232,13 +232,13 @@ namespace InventoryApp {
             price = Convert::ToDouble(txtPrice->Text);
             if (price < 0)
             {
-                MessageBox::Show(L"Ð¦Ñ–Ð½Ð° Ð½Ðµ Ð¼Ð¾Ð¶Ðµ Ð±ÑƒÑ‚Ð¸ Ð²Ñ–Ð´â€™Ñ”Ð¼Ð½Ð¾ÑŽ.", L"ÐŸÐ¾Ð¼Ð¸Ð»ÐºÐ°", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                MessageBox::Show(L"Ö³íà íå ìîæå áóòè â³ä’ºìíîþ.", L"Ïîìèëêà", MessageBoxButtons::OK, MessageBoxIcon::Error);
                 return;
             }
         }
         catch (FormatException^)
         {
-            MessageBox::Show(L"Ð’Ð²ÐµÐ´Ñ–Ñ‚ÑŒ ÐºÐ¾Ñ€ÐµÐºÑ‚Ð½Ðµ Ñ‡Ð¸ÑÐ»Ð¾ Ð´Ð»Ñ Ñ†Ñ–Ð½Ð¸.", L"ÐŸÐ¾Ð¼Ð¸Ð»ÐºÐ°", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            MessageBox::Show(L"Ââåä³òü êîðåêòíå ÷èñëî äëÿ ö³íè.", L"Ïîìèëêà", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 

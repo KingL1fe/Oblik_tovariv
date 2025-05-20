@@ -63,7 +63,7 @@ namespace InventoryApp {
 
         void InitializeComboBoxes()
         {
-            // Р†РЅС–С†С–Р°Р»С–Р·Р°С†С–СЏ РєР»С–С”РЅС‚С–РІ
+            // Ініціалізація клієнтів
             comboBoxCustomers->Items->Clear();
             for (const Customer& customer : inventory->getAllCustomers())
             {
@@ -72,7 +72,7 @@ namespace InventoryApp {
             if (comboBoxCustomers->Items->Count > 0)
                 comboBoxCustomers->SelectedIndex = 0;
 
-            // Р†РЅС–С†С–Р°Р»С–Р·Р°С†С–СЏ РїСЂРѕРґСѓРєС‚С–РІ
+            // Ініціалізація продуктів
             comboBoxProducts->Items->Clear();
             for (const Product& product : inventory->getAllProducts())
             {
@@ -81,17 +81,17 @@ namespace InventoryApp {
             if (comboBoxProducts->Items->Count > 0)
                 comboBoxProducts->SelectedIndex = 0;
 
-            // Р†РЅС–С†С–Р°Р»С–Р·Р°С†С–СЏ СЃС‚Р°С‚СѓСЃС–РІ
+            // Ініціалізація статусів
             comboBoxStatus->Items->Clear();
-            comboBoxStatus->Items->Add(L"РќРѕРІРµ");
-            comboBoxStatus->Items->Add(L"Р’РёРєРѕРЅР°РЅРµ");
-            comboBoxStatus->Items->Add(L"РЎРєР°СЃРѕРІР°РЅРµ");
+            comboBoxStatus->Items->Add(L"Нове");
+            comboBoxStatus->Items->Add(L"Виконане");
+            comboBoxStatus->Items->Add(L"Скасоване");
             comboBoxStatus->SelectedIndex = 0;
         }
 
         void PopulateFields()
         {
-            // Р—Р°РїРѕРІРЅРµРЅРЅСЏ РїРѕР»С–РІ РґР»СЏ СЂРµРґР°РіСѓРІР°РЅРЅСЏ
+            // Заповнення полів для редагування
             for (int i = 0; i < comboBoxCustomers->Items->Count; i++)
             {
                 Customer* customer = inventory->findCustomerById(CustomerId);
@@ -105,7 +105,7 @@ namespace InventoryApp {
             comboBoxStatus->SelectedItem = OrderStatus;
             txtTotalAmount->Text = TotalAmount.ToString();
 
-            // Р—Р°РїРѕРІРЅРµРЅРЅСЏ С‚Р°Р±Р»РёС†С– РїСЂРѕРґСѓРєС‚С–РІ
+            // Заповнення таблиці продуктів
             dataGridViewProducts->Rows->Clear();
             for each (Dictionary<String^, Object^> ^ item in ProductQuantities)
             {
@@ -178,8 +178,8 @@ namespace InventoryApp {
             // dataGridViewProducts
             this->dataGridViewProducts->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
             this->dataGridViewProducts->Columns->Add("ProductId", "ID");
-            this->dataGridViewProducts->Columns->Add("ProductName", "РќР°Р·РІР°");
-            this->dataGridViewProducts->Columns->Add("Quantity", "РљС–Р»СЊРєС–СЃС‚СЊ");
+            this->dataGridViewProducts->Columns->Add("ProductName", "Назва");
+            this->dataGridViewProducts->Columns->Add("Quantity", "Кількість");
             this->dataGridViewProducts->Location = System::Drawing::Point(12, 152);
             this->dataGridViewProducts->Name = L"dataGridViewProducts";
             this->dataGridViewProducts->Size = System::Drawing::Size(398, 150);
@@ -192,7 +192,7 @@ namespace InventoryApp {
             this->btnAddProduct->Name = L"btnAddProduct";
             this->btnAddProduct->Size = System::Drawing::Size(75, 23);
             this->btnAddProduct->TabIndex = 7;
-            this->btnAddProduct->Text = L"Р”РѕРґР°С‚Рё";
+            this->btnAddProduct->Text = L"Додати";
             this->btnAddProduct->UseVisualStyleBackColor = true;
             this->btnAddProduct->Click += gcnew System::EventHandler(this, &AddEditOrderForm::btnAddProduct_Click);
 
@@ -201,7 +201,7 @@ namespace InventoryApp {
             this->btnRemoveProduct->Name = L"btnRemoveProduct";
             this->btnRemoveProduct->Size = System::Drawing::Size(75, 23);
             this->btnRemoveProduct->TabIndex = 8;
-            this->btnRemoveProduct->Text = L"Р’РёРґР°Р»РёС‚Рё";
+            this->btnRemoveProduct->Text = L"Видалити";
             this->btnRemoveProduct->UseVisualStyleBackColor = true;
             this->btnRemoveProduct->Click += gcnew System::EventHandler(this, &AddEditOrderForm::btnRemoveProduct_Click);
 
@@ -219,7 +219,7 @@ namespace InventoryApp {
             this->btnCancel->Name = L"btnCancel";
             this->btnCancel->Size = System::Drawing::Size(75, 23);
             this->btnCancel->TabIndex = 10;
-            this->btnCancel->Text = L"РЎРєР°СЃСѓРІР°С‚Рё";
+            this->btnCancel->Text = L"Скасувати";
             this->btnCancel->UseVisualStyleBackColor = true;
             this->btnCancel->Click += gcnew System::EventHandler(this, &AddEditOrderForm::btnCancel_Click);
 
@@ -239,7 +239,7 @@ namespace InventoryApp {
             this->Controls->Add(this->comboBoxProducts);
             this->Controls->Add(this->comboBoxCustomers);
             this->Name = L"AddEditOrderForm";
-            this->Text = L"Р”РѕРґР°С‚Рё/Р РµРґР°РіСѓРІР°С‚Рё Р·Р°РјРѕРІР»РµРЅРЅСЏ";
+            this->Text = L"Додати/Редагувати замовлення";
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewProducts))->EndInit();
             this->ResumeLayout(false);
             this->PerformLayout();
@@ -250,7 +250,7 @@ namespace InventoryApp {
         System::Void btnAddProduct_Click(System::Object^ sender, System::EventArgs^ e) {
             if (comboBoxProducts->SelectedIndex == -1 || String::IsNullOrEmpty(txtQuantity->Text))
             {
-                MessageBox::Show(L"Р‘СѓРґСЊ Р»Р°СЃРєР°, РІРёР±РµСЂС–С‚СЊ РїСЂРѕРґСѓРєС‚ С– РІРєР°Р¶С–С‚СЊ РєС–Р»СЊРєС–СЃС‚СЊ.", L"РџРѕРјРёР»РєР°",
+                MessageBox::Show(L"Будь ласка, виберіть продукт і вкажіть кількість.", L"Помилка",
                     MessageBoxButtons::OK, MessageBoxIcon::Warning);
                 return;
             }
@@ -258,7 +258,7 @@ namespace InventoryApp {
             int quantity;
             if (!Int32::TryParse(txtQuantity->Text, quantity) || quantity <= 0)
             {
-                MessageBox::Show(L"Р’РєР°Р¶С–С‚СЊ РєРѕСЂРµРєС‚РЅСѓ РєС–Р»СЊРєС–СЃС‚СЊ.", L"РџРѕРјРёР»РєР°",
+                MessageBox::Show(L"Вкажіть коректну кількість.", L"Помилка",
                     MessageBoxButtons::OK, MessageBoxIcon::Warning);
                 return;
             }
@@ -274,7 +274,7 @@ namespace InventoryApp {
 
                 dataGridViewProducts->Rows->Add(product->getId(), comboBoxProducts->SelectedItem->ToString(), quantity);
 
-                // РћРЅРѕРІР»РµРЅРЅСЏ Р·Р°РіР°Р»СЊРЅРѕС— СЃСѓРјРё
+                // Оновлення загальної суми
                 double price = product->getPrice();
                 TotalAmount += price * quantity;
                 txtTotalAmount->Text = TotalAmount.ToString();
@@ -298,7 +298,7 @@ namespace InventoryApp {
             }
             else
             {
-                MessageBox::Show(L"Р‘СѓРґСЊ Р»Р°СЃРєР°, РІРёР±РµСЂС–С‚СЊ РїСЂРѕРґСѓРєС‚ РґР»СЏ РІРёРґР°Р»РµРЅРЅСЏ.", L"РџРѕРјРёР»РєР°",
+                MessageBox::Show(L"Будь ласка, виберіть продукт для видалення.", L"Помилка",
                     MessageBoxButtons::OK, MessageBoxIcon::Warning);
             }
         }
@@ -307,7 +307,7 @@ namespace InventoryApp {
             if (comboBoxCustomers->SelectedIndex == -1 || String::IsNullOrEmpty(txtOrderDate->Text) ||
                 ProductQuantities->Count == 0)
             {
-                MessageBox::Show(L"Р—Р°РїРѕРІРЅС–С‚СЊ СѓСЃС– РѕР±РѕРІвЂ™СЏР·РєРѕРІС– РїРѕР»СЏ С‚Р° РґРѕРґР°Р№С‚Рµ С…РѕС‡Р° Р± РѕРґРёРЅ РїСЂРѕРґСѓРєС‚.", L"РџРѕРјРёР»РєР°",
+                MessageBox::Show(L"Заповніть усі обов’язкові поля та додайте хоча б один продукт.", L"Помилка",
                     MessageBoxButtons::OK, MessageBoxIcon::Warning);
                 return;
             }

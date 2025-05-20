@@ -139,7 +139,7 @@ namespace InventoryApp {
                this->btnSave = (gcnew System::Windows::Forms::Button());
                this->btnLoad = (gcnew System::Windows::Forms::Button());
                this->btnWarehouse = gcnew System::Windows::Forms::Button();
-               this->btnWarehouse->Location = System::Drawing::Point(20, 540); // Змінити координати при потребі
+               this->btnWarehouse->Location = System::Drawing::Point(20, 315); // Змінити координати при потребі
                this->btnWarehouse->Name = L"btnWarehouse";
                this->btnWarehouse->Size = System::Drawing::Size(150, 30);
                this->btnWarehouse->TabIndex = 10;

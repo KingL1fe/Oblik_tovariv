@@ -48,7 +48,7 @@ namespace InventoryApp {
             this->Controls->Add(lblId);
 
             txtId = gcnew TextBox();
-            txtId->Location = Point(60, 225);
+            txtId->Location = Point(150, 225);
             this->Controls->Add(txtId);
 
             Label^ lblLocation = gcnew Label();
@@ -57,7 +57,7 @@ namespace InventoryApp {
             this->Controls->Add(lblLocation);
 
             txtLocation = gcnew TextBox();
-            txtLocation->Location = Point(80, 255);
+            txtLocation->Location = Point(150, 255);
             txtLocation->Width = 200;
             this->Controls->Add(txtLocation);
 

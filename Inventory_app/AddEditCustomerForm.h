@@ -18,7 +18,7 @@ namespace InventoryApp {
         {
             InitializeComponent();
             this->CustomerId = id;
-            this->Text = L"Р”РѕРґР°С‚Рё РєР»С–С”РЅС‚Р°";
+            this->Text = L"Додати клієнта";
         }
 
         AddEditCustomerForm(int id, String^ name, String^ contactInfo, String^ address)
@@ -28,7 +28,7 @@ namespace InventoryApp {
             this->txtName->Text = name;
             this->txtContactInfo->Text = contactInfo;
             this->txtAddress->Text = address;
-            this->Text = L"Р РµРґР°РіСѓРІР°С‚Рё РєР»С–С”РЅС‚Р°";
+            this->Text = L"Редагувати клієнта";
         }
 
         property int CustomerId;
@@ -71,7 +71,7 @@ namespace InventoryApp {
             this->lblName->Name = L"lblName";
             this->lblName->Size = System::Drawing::Size(35, 13);
             this->lblName->TabIndex = 0;
-            this->lblName->Text = L"РќР°Р·РІР°:";
+            this->lblName->Text = L"Назва:";
 
             // lblContactInfo
             this->lblContactInfo->AutoSize = true;
@@ -79,7 +79,7 @@ namespace InventoryApp {
             this->lblContactInfo->Name = L"lblContactInfo";
             this->lblContactInfo->Size = System::Drawing::Size(90, 13);
             this->lblContactInfo->TabIndex = 1;
-            this->lblContactInfo->Text = L"РљРѕРЅС‚Р°РєС‚РЅР° С–РЅС„РѕСЂРјР°С†С–СЏ:";
+            this->lblContactInfo->Text = L"Контактна інформація:";
 
             // lblAddress
             this->lblAddress->AutoSize = true;
@@ -87,7 +87,7 @@ namespace InventoryApp {
             this->lblAddress->Name = L"lblAddress";
             this->lblAddress->Size = System::Drawing::Size(45, 13);
             this->lblAddress->TabIndex = 2;
-            this->lblAddress->Text = L"РђРґСЂРµСЃР°:";
+            this->lblAddress->Text = L"Адреса:";
 
             // txtName
             this->txtName->Location = System::Drawing::Point(110, 12);
@@ -112,7 +112,7 @@ namespace InventoryApp {
             this->btnSave->Name = L"btnSave";
             this->btnSave->Size = System::Drawing::Size(75, 23);
             this->btnSave->TabIndex = 6;
-            this->btnSave->Text = L"Р—Р±РµСЂРµРіС‚Рё";
+            this->btnSave->Text = L"Зберегти";
             this->btnSave->UseVisualStyleBackColor = true;
             this->btnSave->Click += gcnew System::EventHandler(this, &AddEditCustomerForm::btnSave_Click);
 
@@ -121,12 +121,12 @@ namespace InventoryApp {
             this->btnCancel->Name = L"btnCancel";
             this->btnCancel->Size = System::Drawing::Size(75, 23);
             this->btnCancel->TabIndex = 7;
-            this->btnCancel->Text = L"РЎРєР°СЃСѓРІР°С‚Рё";
+            this->btnCancel->Text = L"Скасувати";
             this->btnCancel->UseVisualStyleBackColor = true;
             this->btnCancel->Click += gcnew System::EventHandler(this, &AddEditCustomerForm::btnCancel_Click);
 
             // AddEditCustomerForm
-            this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+            this->AutoScaleDimensions = System::Drawing::SizeF(5, 13);
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
             this->ClientSize = System::Drawing::Size(324, 135);
             this->Controls->Add(this->btnCancel);
@@ -149,21 +149,21 @@ namespace InventoryApp {
 
     private: System::Void btnSave_Click(System::Object^ sender, System::EventArgs^ e) {
         if (String::IsNullOrWhiteSpace(txtName->Text)) {
-            MessageBox::Show(L"РќР°Р·РІР° РєР»С–С”РЅС‚Р° РЅРµ РјРѕР¶Рµ Р±СѓС‚Рё РїРѕСЂРѕР¶РЅСЊРѕСЋ.", L"РџРѕРјРёР»РєР°", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            MessageBox::Show(L"Назва клієнта не може бути порожньою.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 
         if (String::IsNullOrWhiteSpace(txtContactInfo->Text)) {
-            MessageBox::Show(L"РљРѕРЅС‚Р°РєС‚РЅР° С–РЅС„РѕСЂРјР°С†С–СЏ РЅРµ РјРѕР¶Рµ Р±СѓС‚Рё РїРѕСЂРѕР¶РЅСЊРѕСЋ.", L"РџРѕРјРёР»РєР°", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            MessageBox::Show(L"Контактна інформація не може бути порожньою.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 
-        // Р’Р°Р»С–РґР°С†С–СЏ РєРѕРЅС‚Р°РєС‚РЅРѕС— С–РЅС„РѕСЂРјР°С†С–С— (С‚РµР»РµС„РѕРЅ Р°Р±Рѕ email)
+        // Валідація контактної інформації (телефон або email)
         String^ contactInfo = txtContactInfo->Text;
         Regex^ phoneRegex = gcnew Regex("^[\\+]?[0-9]{10,13}$");
         Regex^ emailRegex = gcnew Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
         if (!phoneRegex->IsMatch(contactInfo) && !emailRegex->IsMatch(contactInfo)) {
-            MessageBox::Show(L"Р’РІРµРґС–С‚СЊ РєРѕСЂРµРєС‚РЅРёР№ РЅРѕРјРµСЂ С‚РµР»РµС„РѕРЅСѓ (10-13 С†РёС„СЂ) Р°Р±Рѕ email.", L"РџРѕРјРёР»РєР°", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            MessageBox::Show(L"Введіть коректний номер телефону (10-13 цифр) або email.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 
