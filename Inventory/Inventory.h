@@ -14,9 +14,7 @@
 #include "Supplier.h"
 #include "Order.h"
 #include "Warehouse.h"  
-
-
-
+#include "SalesReport.h"
 
 using namespace std;
 
@@ -27,7 +25,8 @@ private:
     vector<Customer> customers;
     vector<Supplier> suppliers;
     vector<Order> orders;
-    vector<Warehouse> warehouses;  // ✅ Додано
+    vector<Warehouse> warehouses;
+    vector<SalesReport> salesReports;
 
 public:
     Inventory();
@@ -67,6 +66,12 @@ public:
     bool removeWarehouseById(int id);
     Warehouse* findWarehouseById(int id);
     vector<Warehouse> getAllWarehouses() const;
+
+	// Sales Reports
+    void addSalesReport(const SalesReport& report);
+    bool removeSalesReportById(int id);
+    SalesReport* findSalesReportById(int id);
+    vector<SalesReport> getAllSalesReports() const;
 
     // Persistence
     void saveToFile(const string& filename) const;

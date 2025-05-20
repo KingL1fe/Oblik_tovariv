@@ -72,7 +72,7 @@ namespace InventoryApp {
 
             // Додаємо опцію "Без категорії"
             DataRow^ defaultRow = dt->NewRow();
-            defaultRow["Id"] = 0;
+            defaultRow["Id"] = nullptr;
             defaultRow["Name"] = L"Без категорії";
             dt->Rows->Add(defaultRow);
 

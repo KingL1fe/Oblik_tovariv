@@ -16,8 +16,8 @@ private:
 
 public:
 
-    Warehouse(int id, const std::string& location) : id(id), location(location) {}
     Warehouse();
+    Warehouse(int id, const std::string& location) : id(id), location(location) {}
     Warehouse(int id, const string& location, int capacity);
 
     int getId() const;

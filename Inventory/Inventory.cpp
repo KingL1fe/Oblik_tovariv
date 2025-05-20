@@ -171,7 +171,33 @@ vector<Warehouse> Inventory::getAllWarehouses() const {
     return warehouses;
 }
 
-// ✅ SAVE
+void Inventory::addSalesReport(const SalesReport& report) {
+    salesReports.push_back(report);
+}
+
+bool Inventory::removeSalesReportById(int id) {
+    for (auto it = salesReports.begin(); it != salesReports.end(); ++it) {
+        if (it->getId() == id) {
+            salesReports.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+SalesReport* Inventory::findSalesReportById(int id) {
+    for (auto& report : salesReports) {
+        if (report.getId() == id) {
+            return &report;
+        }
+    }
+    return nullptr;
+}
+
+vector<SalesReport> Inventory::getAllSalesReports() const {
+    return salesReports;
+}
+
 void Inventory::saveToFile(const string& filename) const {
     ofstream file(filename);
     if (!file.is_open()) return;
@@ -208,10 +234,15 @@ void Inventory::saveToFile(const string& filename) const {
         file << w.getId() << ";" << w.getLocation() << ";" << w.getCapacity() << "\n";
     }
 
+    // Збереження звітів
+    file << "SalesReports:\n";
+    for (const SalesReport& report : salesReports) {
+        file << report.getId() << ";" << report.getPeriod() << ";" << report.getTotalSales() << "\n";
+    }
+
     file.close();
 }
 
-// ✅ LOAD
 void Inventory::loadFromFile(const string& filename) {
     ifstream file(filename);
     if (!file.is_open()) {
@@ -232,6 +263,7 @@ void Inventory::loadFromFile(const string& filename) {
     bool readingSuppliers = false;
     bool readingOrders = false;
     bool readingWarehouses = false;
+	bool readingSalesReports = false;
 
     while (getline(file, line)) {
         if (line == "Categories:") {
@@ -262,6 +294,15 @@ void Inventory::loadFromFile(const string& filename) {
         else if (line == "Warehouses:") {
             readingWarehouses = true;
             readingCategories = readingProducts = readingCustomers = readingSuppliers = readingOrders = false;
+            continue;
+        }
+        else if (line == "SalesReports:") {
+            readingCategories = false;
+            readingProducts = false;
+            readingCustomers = false;
+            readingSuppliers = false;
+            readingOrders = false;
+            readingSalesReports = true;
             continue;
         }
 
@@ -343,6 +384,16 @@ void Inventory::loadFromFile(const string& filename) {
             int id = stoi(idStr);
             int capacity = stoi(capacityStr);
             warehouses.push_back(Warehouse(id, location, capacity));
+        }
+        else if (readingSalesReports && !line.empty()) {
+            stringstream ss(line);
+            string idStr, period, totalSalesStr;
+            getline(ss, idStr, ';');
+            getline(ss, period, ';');
+            getline(ss, totalSalesStr);
+            int id = stoi(idStr);
+            double totalSales = stod(totalSalesStr);
+            salesReports.push_back(SalesReport(id, period, totalSales));
         }
     }
 

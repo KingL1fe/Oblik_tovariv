@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+
 #include "../RGR/Product.h"
 #include "../RGR/Inventory.h"
 #include "../RGR/Category.h"
@@ -8,6 +9,9 @@
 #include "../RGR/Order.h"
 #include "../RGR/Warehouse.h"
 #include "../RGR/Invoice.h"
+#include "../RGR/SalesReport.h"
+
+
 #include "AddEditProductForm.h"
 #include "AddEditCategoryForm.h"
 #include "AddEditCustomerForm.h"
@@ -27,6 +31,7 @@ namespace InventoryApp {
     using namespace System::Collections::Generic;
     using namespace System::Drawing::Printing;
     using namespace std;
+    using namespace Microsoft::VisualBasic;
 
     public ref class InventoryApp : public System::Windows::Forms::Form
     {
@@ -43,6 +48,7 @@ namespace InventoryApp {
             UpdateSupplierGrid();
             UpdateOrderGrid();
             UpdateInvoiceGrid();
+            UpdateReportsGrid();
         }
 
     protected:
@@ -88,6 +94,11 @@ namespace InventoryApp {
     private: System::Windows::Forms::TabPage^ tabInvoices;
     private: System::Windows::Forms::DataGridView^ dataGridViewInvoices;
     private: System::Windows::Forms::Button^ btnViewInvoice;
+    private: System::Windows::Forms::TabPage^ tabReports;
+    private: System::Windows::Forms::DataGridView^ dataGridViewReports;
+    private: System::Windows::Forms::Button^ btnGenerateReport;
+    private: System::Windows::Forms::Button^ btnViewReport;
+    private: System::Windows::Forms::Button^ btnDeleteReport;
     private: Inventory* inventory;
     private: System::ComponentModel::Container^ components;
     private: System::Windows::Forms::Button^ btnWarehouse;
@@ -154,6 +165,26 @@ namespace InventoryApp {
                this->btnViewInvoice = (gcnew System::Windows::Forms::Button());
                this->tabControl->Controls->Add(this->tabInvoices);
 
+               // tabReports
+               this->tabReports = (gcnew System::Windows::Forms::TabPage());
+               this->dataGridViewReports = (gcnew System::Windows::Forms::DataGridView());
+               this->btnGenerateReport = (gcnew System::Windows::Forms::Button());
+               this->btnViewReport = (gcnew System::Windows::Forms::Button());
+               this->btnDeleteReport = (gcnew System::Windows::Forms::Button());
+               this->tabControl->Controls->Add(this->tabReports);
+
+               // tabReports
+               this->tabReports->Controls->Add(this->btnDeleteReport);
+               this->tabReports->Controls->Add(this->btnViewReport);
+               this->tabReports->Controls->Add(this->btnGenerateReport);
+               this->tabReports->Controls->Add(this->dataGridViewReports);
+               this->tabReports->Location = System::Drawing::Point(4, 22);
+               this->tabReports->Name = L"tabReports";
+               this->tabReports->Padding = System::Windows::Forms::Padding(3);
+               this->tabReports->Size = System::Drawing::Size(552, 274);
+               this->tabReports->TabIndex = 6;
+               this->tabReports->Text = L"Звіти";
+               this->tabReports->UseVisualStyleBackColor = true;
 
                // tabControl
                this->tabControl->Location = System::Drawing::Point(12, 41);
@@ -291,6 +322,42 @@ namespace InventoryApp {
                this->dataGridViewInvoices->TabIndex = 0;
                this->dataGridViewInvoices->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
                this->dataGridViewInvoices->MultiSelect = false;
+
+               // dataGridViewReports
+               this->dataGridViewReports->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+               this->dataGridViewReports->Location = System::Drawing::Point(6, 6);
+               this->dataGridViewReports->Name = L"dataGridViewReports";
+               this->dataGridViewReports->Size = System::Drawing::Size(540, 200);
+               this->dataGridViewReports->TabIndex = 0;
+               this->dataGridViewReports->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
+               this->dataGridViewReports->MultiSelect = false;
+
+               // btnGenerateReport
+               this->btnGenerateReport->Location = System::Drawing::Point(6, 212);
+               this->btnGenerateReport->Name = L"btnGenerateReport";
+               this->btnGenerateReport->Size = System::Drawing::Size(100, 23);
+               this->btnGenerateReport->TabIndex = 1;
+               this->btnGenerateReport->Text = L"Згенерувати";
+               this->btnGenerateReport->UseVisualStyleBackColor = true;
+               this->btnGenerateReport->Click += gcnew System::EventHandler(this, &InventoryApp::btnGenerateReport_Click);
+
+               // btnViewReport
+               this->btnViewReport->Location = System::Drawing::Point(112, 212);
+               this->btnViewReport->Name = L"btnViewReport";
+               this->btnViewReport->Size = System::Drawing::Size(100, 23);
+               this->btnViewReport->TabIndex = 2;
+               this->btnViewReport->Text = L"Переглянути";
+               this->btnViewReport->UseVisualStyleBackColor = true;
+               this->btnViewReport->Click += gcnew System::EventHandler(this, &InventoryApp::btnViewReport_Click);
+
+               // btnDeleteReport
+               this->btnDeleteReport->Location = System::Drawing::Point(218, 212);
+               this->btnDeleteReport->Name = L"btnDeleteReport";
+               this->btnDeleteReport->Size = System::Drawing::Size(100, 23);
+               this->btnDeleteReport->TabIndex = 3;
+               this->btnDeleteReport->Text = L"Видалити";
+               this->btnDeleteReport->UseVisualStyleBackColor = true;
+               this->btnDeleteReport->Click += gcnew System::EventHandler(this, &InventoryApp::btnDeleteReport_Click);
 
                // btnViewInvoice
                this->btnViewInvoice->Location = System::Drawing::Point(6, 212);
@@ -519,6 +586,8 @@ namespace InventoryApp {
             inventory->addSupplier(Supplier(1, std::string("ТОВ Постачальник"), std::string("supplier@example.com"), std::string("вул. Лесі Українки, Львів")));
             vector<pair<int, int>> orderProducts = { {1, 2}, {2, 5} }; // 2 laptops, 5 mice
             inventory->addOrder(Order(1, 1, "2025-05-13", "Нове", orderProducts, 2099.93));
+            inventory->addSalesReport(SalesReport(1, "Травень 2023", 2099.93));
+            UpdateReportsGrid();
             UpdateProductGrid();
             UpdateCategoryGrid();
             UpdateCustomerGrid();
@@ -634,6 +703,25 @@ namespace InventoryApp {
                     customerName,
                     gcnew String(order.getOrderDate().c_str()),
                     invoice.calculateTotal()
+                );
+            }
+        }
+
+        void UpdateReportsGrid()
+        {
+            dataGridViewReports->Rows->Clear();
+            dataGridViewReports->Columns->Clear();
+
+            dataGridViewReports->Columns->Add("ID", "ID");
+            dataGridViewReports->Columns->Add("Period", "Період");
+            dataGridViewReports->Columns->Add("TotalSales", "Загальні продажі");
+
+            for (const SalesReport& report : inventory->getAllSalesReports())
+            {
+                dataGridViewReports->Rows->Add(
+                    report.getId(),
+                    gcnew String(report.getPeriod().c_str()),
+                    report.getTotalSales()
                 );
             }
         }
@@ -1002,26 +1090,6 @@ namespace InventoryApp {
                    e->Graphics->DrawString(invoiceRichTextBox->Text, invoiceRichTextBox->Font, Brushes::Black, 50, 50);
                }
 
-           private:
-               RichTextBox^ invoiceRichTextBox; // Поле для зберігання RichTextBox
-
-               // Метод для обробки події Click кнопки Print
-               void OnPrintButtonClick(Object^ sender, EventArgs^ e) {
-                   PrintDocument^ pd = gcnew PrintDocument();
-                   pd->PrintPage += gcnew PrintPageEventHandler(this, &InventoryApp::OnPrintPage);
-                   PrintDialog^ printDialog = gcnew PrintDialog();
-                   printDialog->Document = pd;
-                   if (printDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-                   {
-                       pd->Print();
-                   }
-               }
-
-               // Метод для обробки події PrintPage
-               void OnPrintPage(Object^ sender, PrintPageEventArgs^ e) {
-                   e->Graphics->DrawString(invoiceRichTextBox->Text, invoiceRichTextBox->Font, Brushes::Black, 50, 50);
-               }
-
     private: System::Void btnViewInvoice_Click(System::Object^ sender, System::EventArgs^ e) {
         if (dataGridViewInvoices->SelectedRows->Count > 0)
         {
@@ -1103,6 +1171,93 @@ namespace InventoryApp {
         else
         {
             MessageBox::Show(L"Будь ласка, виберіть рахунок для перегляду.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+         private: System::Void btnGenerateReport_Click(System::Object^ sender, System::EventArgs^ e) {
+             // Створюємо форму для введення періоду
+             Form^ inputForm = gcnew Form();
+             inputForm->Text = "Генерація звіту";
+             inputForm->Width = 300;
+             inputForm->Height = 150;
+
+             TextBox^ textBox = gcnew TextBox();
+             textBox->Width = 200;
+             textBox->Location = Point(50, 20);
+
+             Button^ okButton = gcnew Button();
+             okButton->Text = "OK";
+             okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
+             okButton->Location = Point(100, 60);
+
+             inputForm->Controls->Add(textBox);
+             inputForm->Controls->Add(okButton);
+             inputForm->AcceptButton = okButton;
+
+             if (inputForm->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+             {
+                 String^ period = textBox->Text;
+                 if (!String::IsNullOrEmpty(period))
+                 {
+                     // Розраховуємо загальні продажі
+                     double totalSales = 0;
+                     for (const Order& order : inventory->getAllOrders())
+                     {
+                         totalSales += order.getTotalAmount();
+                     }
+
+                     // Створюємо новий звіт
+                     int newId = inventory->getAllSalesReports().size() + 1;
+                     SalesReport newReport(newId, msclr::interop::marshal_as<std::string>(period), totalSales);
+                     inventory->addSalesReport(newReport);
+                     UpdateReportsGrid();
+
+                     MessageBox::Show(
+                         String::Format("Звіт за період {0} успішно створено.\nЗагальні продажі: {1:C}", period, totalSales),
+                         "Звіт створено",
+                         MessageBoxButtons::OK,
+                         MessageBoxIcon::Information);
+                 }
+             }
+         }
+
+    private: System::Void btnViewReport_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewReports->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewReports->SelectedRows[0]->Cells[0]->Value);
+            SalesReport* report = inventory->findSalesReportById(id);
+            if (report)
+            {
+                MessageBox::Show(
+                    String::Format("Звіт #{0}\nПеріод: {1}\nЗагальні продажі: {2:C}",
+                        report->getId(),
+                        gcnew String(report->getPeriod().c_str()),
+                        report->getTotalSales()),
+                    "Деталі звіту",
+                    MessageBoxButtons::OK,
+                    MessageBoxIcon::Information);
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть звіт для перегляду.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+    private: System::Void btnDeleteReport_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewReports->SelectedRows->Count > 0)
+        {
+            int id = Convert::ToInt32(dataGridViewReports->SelectedRows[0]->Cells[0]->Value);
+            if (MessageBox::Show(L"Ви впевнені, що хочете видалити цей звіт?", L"Підтвердження",
+                MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+            {
+                inventory->removeSalesReportById(id);
+                UpdateReportsGrid();
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть звіт для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
         }
     }
 
