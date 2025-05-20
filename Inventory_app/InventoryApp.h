@@ -1,5 +1,4 @@
-﻿
-#pragma once
+﻿#pragma once
 
 #include "../RGR/Product.h"
 #include "../RGR/Inventory.h"
@@ -8,6 +7,7 @@
 #include "../RGR/Supplier.h"
 #include "../RGR/Order.h"
 #include "../RGR/Warehouse.h"
+#include "../RGR/Invoice.h"
 #include "AddEditProductForm.h"
 #include "AddEditCategoryForm.h"
 #include "AddEditCustomerForm.h"
@@ -25,6 +25,7 @@ namespace InventoryApp {
     using namespace System::Data;
     using namespace System::Drawing;
     using namespace System::Collections::Generic;
+    using namespace System::Drawing::Printing;
     using namespace std;
 
     public ref class InventoryApp : public System::Windows::Forms::Form
@@ -41,6 +42,7 @@ namespace InventoryApp {
             UpdateCustomerGrid();
             UpdateSupplierGrid();
             UpdateOrderGrid();
+            UpdateInvoiceGrid();
         }
 
     protected:
@@ -83,6 +85,9 @@ namespace InventoryApp {
     private: System::Windows::Forms::Button^ btnDeleteOrder;
     private: System::Windows::Forms::Button^ btnSave;
     private: System::Windows::Forms::Button^ btnLoad;
+    private: System::Windows::Forms::TabPage^ tabInvoices;
+    private: System::Windows::Forms::DataGridView^ dataGridViewInvoices;
+    private: System::Windows::Forms::Button^ btnViewInvoice;
     private: Inventory* inventory;
     private: System::ComponentModel::Container^ components;
     private: System::Windows::Forms::Button^ btnWarehouse;
@@ -143,6 +148,12 @@ namespace InventoryApp {
                this->tabOrders->SuspendLayout();
                this->tabControl->SuspendLayout();
                this->SuspendLayout();
+
+               this->tabInvoices = (gcnew System::Windows::Forms::TabPage());
+               this->dataGridViewInvoices = (gcnew System::Windows::Forms::DataGridView());
+               this->btnViewInvoice = (gcnew System::Windows::Forms::Button());
+               this->tabControl->Controls->Add(this->tabInvoices);
+
 
                // tabControl
                this->tabControl->Location = System::Drawing::Point(12, 41);
@@ -216,6 +227,17 @@ namespace InventoryApp {
                this->tabOrders->TabIndex = 4;
                this->tabOrders->Text = L"Замовлення";
 
+               // tabInvoices
+               this->tabInvoices->Controls->Add(this->btnViewInvoice);
+               this->tabInvoices->Controls->Add(this->dataGridViewInvoices);
+               this->tabInvoices->Location = System::Drawing::Point(4, 22);
+               this->tabInvoices->Name = L"tabInvoices";
+               this->tabInvoices->Padding = System::Windows::Forms::Padding(3);
+               this->tabInvoices->Size = System::Drawing::Size(552, 274);
+               this->tabInvoices->TabIndex = 5;
+               this->tabInvoices->Text = L"Рахунки";
+               this->tabInvoices->UseVisualStyleBackColor = true;
+
                // dataGridViewProducts
                this->dataGridViewProducts->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
                this->dataGridViewProducts->Location = System::Drawing::Point(6, 6);
@@ -260,6 +282,24 @@ namespace InventoryApp {
                this->dataGridViewOrders->TabIndex = 0;
                this->dataGridViewOrders->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
                this->dataGridViewOrders->MultiSelect = false;
+
+               // dataGridViewInvoices
+               this->dataGridViewInvoices->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+               this->dataGridViewInvoices->Location = System::Drawing::Point(6, 6);
+               this->dataGridViewInvoices->Name = L"dataGridViewInvoices";
+               this->dataGridViewInvoices->Size = System::Drawing::Size(540, 200);
+               this->dataGridViewInvoices->TabIndex = 0;
+               this->dataGridViewInvoices->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
+               this->dataGridViewInvoices->MultiSelect = false;
+
+               // btnViewInvoice
+               this->btnViewInvoice->Location = System::Drawing::Point(6, 212);
+               this->btnViewInvoice->Name = L"btnViewInvoice";
+               this->btnViewInvoice->Size = System::Drawing::Size(100, 23);
+               this->btnViewInvoice->TabIndex = 1;
+               this->btnViewInvoice->Text = L"Переглянути";
+               this->btnViewInvoice->UseVisualStyleBackColor = true;
+               this->btnViewInvoice->Click += gcnew System::EventHandler(this, &InventoryApp::btnViewInvoice_Click);
 
                // btnAddProduct
                this->btnAddProduct->Location = System::Drawing::Point(6, 212);
@@ -568,6 +608,33 @@ namespace InventoryApp {
                 String^ customerName = customer ? gcnew String(customer->getName().c_str()) : L"Невідомий";
                 dataGridViewOrders->Rows->Add(order.getId(), customerName,
                     gcnew String(order.getOrderDate().c_str()), gcnew String(order.getStatus().c_str()), order.getTotalAmount());
+            }
+        }
+
+        void UpdateInvoiceGrid()
+        {
+            dataGridViewInvoices->Rows->Clear();
+            dataGridViewInvoices->Columns->Clear();
+
+            dataGridViewInvoices->Columns->Add("InvoiceNumber", "Номер рахунку");
+            dataGridViewInvoices->Columns->Add("CustomerName", "Клієнт");
+            dataGridViewInvoices->Columns->Add("OrderDate", "Дата замовлення");
+            dataGridViewInvoices->Columns->Add("TotalAmount", "Сума");
+
+            for (const Order& order : inventory->getAllOrders())
+            {
+                Customer* customer = inventory->findCustomerById(order.getCustomerId());
+                String^ customerName = customer ? gcnew String(customer->getName().c_str()) : L"Невідомий";
+
+                // Створюємо тимчасовий інвойс для відображення
+                Invoice invoice(order.getId(), *customer, order, order.getOrderDate());
+
+                dataGridViewInvoices->Rows->Add(
+                    invoice.getInvoiceNumber(),
+                    customerName,
+                    gcnew String(order.getOrderDate().c_str()),
+                    invoice.calculateTotal()
+                );
             }
         }
 
@@ -913,6 +980,110 @@ namespace InventoryApp {
         else
         {
             MessageBox::Show(L"Будь ласка, виберіть замовлення для видалення.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        }
+    }
+
+           private:
+               RichTextBox^ invoiceRichTextBox; // Поле для зберігання RichTextBox
+
+               // Метод для обробки події Click кнопки Print
+               void OnPrintButtonClick(Object^ sender, EventArgs^ e) {
+                   PrintDocument^ pd = gcnew PrintDocument();
+                   pd->PrintPage += gcnew PrintPageEventHandler(this, &InventoryApp::OnPrintPage);
+                   PrintDialog^ printDialog = gcnew PrintDialog();
+                   printDialog->Document = pd;
+                   if (printDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+                   {
+                       pd->Print();
+                   }
+               }
+
+               // Метод для обробки події PrintPage
+               void OnPrintPage(Object^ sender, PrintPageEventArgs^ e) {
+                   e->Graphics->DrawString(invoiceRichTextBox->Text, invoiceRichTextBox->Font, Brushes::Black, 50, 50);
+               }
+
+    private: System::Void btnViewInvoice_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (dataGridViewInvoices->SelectedRows->Count > 0)
+        {
+            int invoiceNumber = Convert::ToInt32(dataGridViewInvoices->SelectedRows[0]->Cells[0]->Value);
+            Order* order = inventory->findOrderById(invoiceNumber);
+            if (order)
+            {
+                Customer* customer = inventory->findCustomerById(order->getCustomerId());
+                if (customer)
+                {
+                    Invoice invoice(invoiceNumber, *customer, *order, order->getOrderDate());
+
+                    // Створюємо форму для відображення інвойсу
+                    Form^ invoiceForm = gcnew Form();
+                    invoiceForm->Text = L"Рахунок-фактура #" + invoiceNumber;
+                    invoiceForm->Size = System::Drawing::Size(500, 600);
+                    invoiceForm->StartPosition = FormStartPosition::CenterParent;
+                    invoiceForm->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
+                    invoiceForm->MaximizeBox = false;
+
+                    invoiceRichTextBox = gcnew RichTextBox(); // Зберігаємо в поле класу
+                    invoiceRichTextBox->Dock = DockStyle::Fill;
+                    invoiceRichTextBox->ReadOnly = true;
+                    invoiceRichTextBox->Font = gcnew System::Drawing::Font("Arial", 10);
+
+                    // Формуємо текст рахунку
+                    String^ invoiceText = String::Format(
+                        L"Рахунок-фактура #{0}\n\n"
+                        L"Дата: {1}\n\n"
+                        L"Клієнт: {2}\n"
+                        L"Контакт: {3}\n"
+                        L"Адреса: {4}\n\n"
+                        L"Замовлення #{0}\n"
+                        L"Дата замовлення: {1}\n"
+                        L"Статус: {5}\n\n"
+                        L"Товари:\n",
+                        invoiceNumber,
+                        gcnew String(order->getOrderDate().c_str()),
+                        gcnew String(customer->getName().c_str()),
+                        gcnew String(customer->getContactInfo().c_str()),
+                        gcnew String(customer->getAddress().c_str()),
+                        gcnew String(order->getStatus().c_str())
+                    );
+
+                    // Додаємо товари
+                    double total = 0;
+                    for (const auto& item : order->getProductQuantities())
+                    {
+                        Product* product = inventory->findProductById(item.first);
+                        if (product)
+                        {
+                            double itemTotal = product->getPrice() * item.second;
+                            total += itemTotal;
+                            invoiceText += String::Format(
+                                L"- {0} x {1} @ {2:C} = {3:C}\n",
+                                item.second,
+                                gcnew String(product->getName().c_str()),
+                                product->getPrice(),
+                                itemTotal
+                            );
+                        }
+                    }
+
+                    invoiceText += String::Format(L"\nЗагальна сума: {0:C}", total);
+
+                    invoiceRichTextBox->Text = invoiceText;
+                    invoiceForm->Controls->Add(invoiceRichTextBox);
+
+                    Button^ btnPrint = gcnew Button();
+                    btnPrint->Text = L"Друкувати";
+                    btnPrint->Dock = DockStyle::Bottom;
+                    btnPrint->Click += gcnew EventHandler(this, &InventoryApp::OnPrintButtonClick); // Використовуємо метод класу
+
+                    invoiceForm->Controls->Add(btnPrint);
+                    invoiceForm->ShowDialog();
+                }
+            }
+        }
+        else
+        {
+            MessageBox::Show(L"Будь ласка, виберіть рахунок для перегляду.", L"Помилка", MessageBoxButtons::OK, MessageBoxIcon::Warning);
         }
     }
 
